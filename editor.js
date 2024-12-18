@@ -142,7 +142,46 @@ document.getElementById("create").addEventListener("click", () => {
         if(label == ""){
             label = "Object"+objs.length;
         }
-        objs.push(new JObject(Number(pos[0]), Number(pos[1]), Number(pos[2]), Number(rot[0]), Number(rot[1]), Number(rot[2]), Number(scale[0]), Number(scale[1]), Number(scale[2]), label, document.getElementById("lst_mdn").value, Number(document.getElementById("lst_mts").value)));
+        if(document.getElementById("lst_mts").value != ""){
+            objs.push(new JObject(Number(pos[0]), Number(pos[1]), Number(pos[2]), Number(rot[0]), Number(rot[1]), Number(rot[2]), Number(scale[0]), Number(scale[1]), Number(scale[2]), label, document.getElementById("lst_mdn").value, Number(document.getElementById("lst_mts").value)));
+        }
+    }
+
+    ch[4] = true;
+});
+
+document.getElementById("apply").addEventListener("click", () => {
+    var label = document.getElementById("obj_label").value;
+    var pos = [document.getElementById("posx").value, document.getElementById("posy").value, document.getElementById("posz").value];
+    var rot = [document.getElementById("rotx").value, document.getElementById("roty").value, document.getElementById("rotz").value];
+    var scale = [document.getElementById("scalex").value, document.getElementById("scaley").value, document.getElementById("scalez").value];
+    
+    var cb = false;
+
+    const sp = document.getElementById("lst_mdn").value.split("");
+    if(document.getElementById("lst_mdn").value == "-4" || document.getElementById("lst_mdn").value == "-5"){
+        if(label == ""){
+            label = "Light"+lts.length;
+        }
+        lts.push(new JLight(Number(pos[0]), Number(pos[1]), Number(pos[2]), Number(rot[0]), Number(rot[1]), Number(rot[2]), Number(scale[0]), Number(scale[1]), Number(scale[2]), label));
+        cb = true;
+    }
+    if(sp.length > 3 && cb == false){
+        if(sp[0] == "s" && sp[1] == "p" && sp[2] == "k"){
+            if(label == ""){
+                label = "Speaker"+spks.length;
+            }
+            spks.push(new JAudio(Number(pos[0]), Number(pos[1]), Number(pos[2]), Number(rot[1]), Number(scale[1]), label, document.getElementById("lst_mdn").value));
+            cb = true;
+        }
+    }
+    if(cb == false){
+        if(label == ""){
+            label = "Object"+objs.length;
+        }
+        if(document.getElementById("lst_mts").value != ""){
+            objs.push(new JObject(Number(pos[0]), Number(pos[1]), Number(pos[2]), Number(rot[0]), Number(rot[1]), Number(rot[2]), Number(scale[0]), Number(scale[1]), Number(scale[2]), label, document.getElementById("lst_mdn").value, Number(document.getElementById("lst_mts").value)));
+        }
     }
 
     ch[4] = true;
@@ -236,6 +275,8 @@ document.getElementById("save").addEventListener("click", () => {
     download("scene.html", htmlcont + sdf + `</body>`);
 });
 
+var lastsel = "";
+
 function lp(){
     if(ch[0] == true){
         var lst = document.getElementById("lst_md_ass");
@@ -281,7 +322,7 @@ function lp(){
     document.getElementById("scaley").style.width = "53px";
     const sp = document.getElementById("lst_mdn").value.split("");
     if(sp.length > 3){
-        if(sp[0] == "s" || sp[1] == "p" || sp[2] == "k"){
+        if(sp[0] == "s" && sp[1] == "p" && sp[2] == "k"){
             document.getElementById("rot").innerText = "Power";
             document.getElementById("scale_p").innerText = "Volume";
             document.getElementById("rotx").style.display = "none";
@@ -309,6 +350,74 @@ function lp(){
             lst.innerHTML += '<option value="aud' + i + '">' + spks[i].label + '</option>';
         }
         ch[4] = false;
+    }
+    //var oid = Number(document.getElementById("lst").value.replace("obj", ""));
+    var oid = document.getElementById("lst").value.split("");
+    if(oid[0] == "o" && oid[1] == "b" && oid[2] == "j"){
+        oid = Number(document.getElementById("lst").value.replace("obj", ""));
+        if(lastsel != document.getElementById("lst").value){
+            document.getElementById("posx").value = objs[oid].pos[0];
+            document.getElementById("posy").value = objs[oid].pos[1];
+            document.getElementById("posz").value = objs[oid].pos[2];
+            document.getElementById("rotx").value = objs[oid].rot[0];
+            document.getElementById("roty").value = objs[oid].rot[1];
+            document.getElementById("rotz").value = objs[oid].rot[2];
+            document.getElementById("scalex").value = objs[oid].scale[0];
+            document.getElementById("scaley").value = objs[oid].scale[1];
+            document.getElementById("scalez").value = objs[oid].scale[2];
+            document.getElementById("lst_mts").value = String(objs[oid].material);
+            document.getElementById("lst_mdn").value = objs[oid].model;
+            lastsel = document.getElementById("lst").value;
+        }
+        objs[oid].pos[0] = document.getElementById("posx").value;
+        objs[oid].pos[1] = document.getElementById("posy").value;
+        objs[oid].pos[2] = document.getElementById("posz").value;
+        objs[oid].rot[0] = document.getElementById("rotx").value;
+        objs[oid].rot[1] = document.getElementById("roty").value;
+        objs[oid].rot[2] = document.getElementById("rotz").value;
+        objs[oid].scale[0] = document.getElementById("scalex").value;
+        objs[oid].scale[1] = document.getElementById("scaley").value;
+        objs[oid].scale[2] = document.getElementById("scalez").value;
+    }else if(oid[0] == "l" && oid[1] == "t"){
+        oid = Number(document.getElementById("lst").value.replace("lt", ""));
+        if(lastsel != document.getElementById("lst").value){
+            document.getElementById("posx").value = lts[oid].pos[0];
+            document.getElementById("posy").value = lts[oid].pos[1];
+            document.getElementById("posz").value = lts[oid].pos[2];
+            document.getElementById("rotx").value = lts[oid].rot[0];
+            document.getElementById("roty").value = lts[oid].rot[1];
+            document.getElementById("rotz").value = lts[oid].rot[2];
+            document.getElementById("scalex").value = lts[oid].color[0];
+            document.getElementById("scaley").value = lts[oid].color[1];
+            document.getElementById("scalez").value = lts[oid].color[2];
+            document.getElementById("lst_mdn").value = "-4";
+            lastsel = document.getElementById("lst").value;
+        }
+        lts[oid].pos[0] = document.getElementById("posx").value;
+        lts[oid].pos[1] = document.getElementById("posy").value;
+        lts[oid].pos[2] = document.getElementById("posz").value;
+        lts[oid].rot[0] = document.getElementById("rotx").value;
+        lts[oid].rot[1] = document.getElementById("roty").value;
+        lts[oid].rot[2] = document.getElementById("rotz").value;
+        lts[oid].color[0] = document.getElementById("scalex").value;
+        lts[oid].color[1] = document.getElementById("scaley").value;
+        lts[oid].color[2] = document.getElementById("scalez").value;
+    }else if(oid[0] == "a" && oid[1] == "u" && oid[2] == "d"){
+        oid = Number(document.getElementById("lst").value.replace("aud", ""));
+        if(lastsel != document.getElementById("lst").value){
+            document.getElementById("posx").value = spks[oid].pos[0];
+            document.getElementById("posy").value = spks[oid].pos[1];
+            document.getElementById("posz").value = spks[oid].pos[2];
+            document.getElementById("roty").value = spks[oid].power;
+            document.getElementById("scaley").value = spks[oid].volume;
+            document.getElementById("lst_mdn").value = spks[oid].audio;
+            lastsel = document.getElementById("lst").value;
+        }
+        spks[oid].pos[0] = document.getElementById("posx").value;
+        spks[oid].pos[1] = document.getElementById("posy").value;
+        spks[oid].pos[2] = document.getElementById("posz").value;
+        spks[oid].power = document.getElementById("roty").value;
+        spks[oid].volume = document.getElementById("scaley").value;
     }
     setTimeout(lp, 4);
 }
