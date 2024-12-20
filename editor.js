@@ -17,6 +17,7 @@ class JObject{
         this.label = label;
         this.model = model;
         this.material = material;
+        this.ch = true;
     }
 }
 
@@ -26,6 +27,7 @@ class JLight{
         this.rot = [xr, yr, zr];
         this.color = [r, g, b];
         this.label = label;
+        this.ch = true;
     }
 }
 
@@ -36,6 +38,7 @@ class JAudio{
         this.volume = volume;
         this.label = label;
         this.audio = audio;
+        this.ch = true;
     }
 }
 
@@ -155,32 +158,43 @@ document.getElementById("apply").addEventListener("click", () => {
     var pos = [document.getElementById("posx").value, document.getElementById("posy").value, document.getElementById("posz").value];
     var rot = [document.getElementById("rotx").value, document.getElementById("roty").value, document.getElementById("rotz").value];
     var scale = [document.getElementById("scalex").value, document.getElementById("scaley").value, document.getElementById("scalez").value];
-    
-    var cb = false;
 
-    const sp = document.getElementById("lst_mdn").value.split("");
-    if(document.getElementById("lst_mdn").value == "-4" || document.getElementById("lst_mdn").value == "-5"){
-        if(label == ""){
-            label = "Light"+lts.length;
-        }
-        lts.push(new JLight(Number(pos[0]), Number(pos[1]), Number(pos[2]), Number(rot[0]), Number(rot[1]), Number(rot[2]), Number(scale[0]), Number(scale[1]), Number(scale[2]), label));
-        cb = true;
-    }
-    if(sp.length > 3 && cb == false){
-        if(sp[0] == "s" && sp[1] == "p" && sp[2] == "k"){
+    var nam = document.getElementById("lst").value;
+    var namsep = nam;
+    namsep.split("");
+
+    if(namsep[0] == "o" && namsep[1] == "b" && namsep[2] == "j"){
+        nam = Number(nam.replace("obj", ""));
+        var tc = document.getElementById("lst_mdn").value.split("");
+        if((tc[0] == "m" && tc[1] == "d") || tc[1] == "1" || tc[1] == "2" || tc[1] == "3"){
             if(label == ""){
-                label = "Speaker"+spks.length;
+                label = objs[nam].label;
             }
-            spks.push(new JAudio(Number(pos[0]), Number(pos[1]), Number(pos[2]), Number(rot[1]), Number(scale[1]), label, document.getElementById("lst_mdn").value));
-            cb = true;
+            objs[nam] = new JObject(Number(pos[0]), Number(pos[1]), Number(pos[2]), Number(rot[0]), Number(rot[1]), Number(rot[2]), Number(scale[0]), Number(scale[1]), Number(scale[2]), label, document.getElementById("lst_mdn").value, Number(document.getElementById("lst_mts").value));
+        }else{
+            alert("Types must coincide");
         }
-    }
-    if(cb == false){
-        if(label == ""){
-            label = "Object"+objs.length;
+    }else if(namsep[0] == "a" && namsep[1] == "u" && namsep[2] == "d"){
+        nam = Number(nam.replace("obj", ""));
+        var tc = document.getElementById("lst_mdn").value.split("");
+        if(tc[0] == "s" && tc[1] == "p" && tc[2] == "k"){
+            if(label == ""){
+                label = spks[nam].label;
+            }
+            spks[nam] = new JAudio(Number(pos[0]), Number(pos[1]), Number(pos[2]), Number(rot[1]), Number(scale[1]), label, document.getElementById("lst_mdn").value);
+        }else{
+            alert("Types must coincide");
         }
-        if(document.getElementById("lst_mts").value != ""){
-            objs.push(new JObject(Number(pos[0]), Number(pos[1]), Number(pos[2]), Number(rot[0]), Number(rot[1]), Number(rot[2]), Number(scale[0]), Number(scale[1]), Number(scale[2]), label, document.getElementById("lst_mdn").value, Number(document.getElementById("lst_mts").value)));
+    }else if(namsep[0] == "l" && namsep[1] == "t"){
+        nam = Number(nam.replace("obj", ""));
+        var tc = document.getElementById("lst_mdn").value;
+        if(tc == "-4" || tc == "-5"){
+            if(label == ""){
+                label = lts[nam].label;
+            }
+            lts[nam] = new JLight(Number(pos[0]), Number(pos[1]), Number(pos[2]), Number(rot[0]), Number(rot[1]), Number(rot[2]), Number(scale[0]), Number(scale[1]), Number(scale[2]), label);
+        }else{
+            alert("Types must coincide");
         }
     }
 
