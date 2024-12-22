@@ -220,7 +220,7 @@ document.getElementById("import_md").addEventListener("click", () => {
                     md.src = reader.result;
                     md.style = "display: none;";
                     console.log("model parsing done!");
-                    htmlcont += `<iframe src="` + model_lb[model_lb.length-1] + `" id="` + md.id + `"></iframe>
+                    htmlcont += `<iframe src="models/` + model_lb[model_lb.length-1] + `" id="` + md.id + `"></iframe>
                     `;
                 }
             }
@@ -235,7 +235,7 @@ document.getElementById("import_md").addEventListener("click", () => {
                     md.src = reader.result;
                     md.style = "display: none;";
                     console.log("image parsing done!");
-                    htmlcont += `<img src="` + tex_lb[tex_lb.length-1] + `" id="` + md.id + `"></img>
+                    htmlcont += `<img src="textures/` + tex_lb[tex_lb.length-1] + `" id="` + md.id + `"></img>
                     `;
                 }
             }
@@ -250,7 +250,7 @@ document.getElementById("import_md").addEventListener("click", () => {
                     md.src = reader.result;
                     md.style = "display: none;";
                     console.log("audio parsing done!");
-                    htmlcont += `<audio src="` + audio_lb[audio_lb.length-1] + `" id="` + md.id + `"></audio>
+                    htmlcont += `<audio src="audio/` + audio_lb[audio_lb.length-1] + `" id="` + md.id + `"></audio>
                     `;
                 }
             }
@@ -259,7 +259,7 @@ document.getElementById("import_md").addEventListener("click", () => {
 });
 
 document.getElementById("save").addEventListener("click", () => {
-    var sdf = `<iframe id="scene">`;
+    var sdf = ``;
     for(var i = 0; i != objs.length; i+=1){
         var posrotscale = objs[i].pos[2] + ` ` + objs[i].pos[1] + ` ` + objs[i].pos[0] + ` ` + objs[i].rot[2] + ` ` + objs[i].rot[1] + ` ` + objs[i].rot[0] + ` ` + objs[i].scale[2] + ` ` + objs[i].scale[1] + ` ` + objs[i].scale[0] + `
         `;
@@ -285,8 +285,8 @@ document.getElementById("save").addEventListener("click", () => {
         `;
         sdf += `sp ` + Number(spks[i].audio.replace("spk", "")) + ` ` + posrotscale;
     }
-    sdf += `</iframe>`;
-    download("scene.html", htmlcont + sdf + `</body>`);
+    download("scene.html", htmlcont + `<iframe id="scene" src="scene.sdf.txt"></iframe></body>`);
+    download("scene.sdf.txt", sdf);
 });
 
 var lastsel = "";
@@ -325,6 +325,7 @@ function lp(){
         ch[3] = false;
     }
     document.getElementById("scale_p").innerText = "Scale";
+    document.getElementById("rot").innerText = "Rotation";
     if(document.getElementById("lst_mdn").value == "-4" || document.getElementById("lst_mdn").value == "-5"){
         document.getElementById("scale_p").innerText = "Color";
     }
@@ -365,7 +366,6 @@ function lp(){
         }
         ch[4] = false;
     }
-    //var oid = Number(document.getElementById("lst").value.replace("obj", ""));
     var oid = document.getElementById("lst").value.split("");
     if(oid[0] == "o" && oid[1] == "b" && oid[2] == "j"){
         oid = Number(document.getElementById("lst").value.replace("obj", ""));
