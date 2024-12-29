@@ -42,6 +42,14 @@ class JAudio{
     }
 }
 
+class JPointer{
+    constructor(xp, yp, zp, xr, yr, zr, xs, ys, zs){
+        this.pos = [xp, yp, zp];
+        this.rot = [xr, yr, zr];
+        this.scale = [xs, ys, zs];
+    }
+}
+
 function download(filename, text) {
     var element = document.createElement('a');
     element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
@@ -86,6 +94,8 @@ var lts = [];
 var spks = [];
 
 var selected = -1;
+
+var pointer = new JPointer(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 
 var input = document.createElement('input');
 input.type = 'file';
@@ -546,6 +556,29 @@ function lp(){
         spks[oid].pos[2] = document.getElementById("posz").value;
         spks[oid].power = document.getElementById("roty").value;
         spks[oid].volume = document.getElementById("scaley").value;
+    }else if(oid[0] == "p" && oid[1] == "i" && oid[2] == "t"){
+        if(lastsel != document.getElementById("lst").value){
+            document.getElementById("posx").value = pointer.pos[0];
+            document.getElementById("posy").value = pointer.pos[1];
+            document.getElementById("posz").value = pointer.pos[2];
+            document.getElementById("rotx").value = pointer.rot[0];
+            document.getElementById("roty").value = pointer.rot[1];
+            document.getElementById("rotz").value = pointer.rot[2];
+            document.getElementById("scalex").value = pointer.scale[0];
+            document.getElementById("scaley").value = pointer.scale[1];
+            document.getElementById("scalez").value = pointer.scale[2];
+            document.getElementById("lst_mdn").value = "-1";
+            lastsel = document.getElementById("lst").value;
+        }
+        pointer.pos[0] = document.getElementById("posx").value;
+        pointer.pos[1] = document.getElementById("posy").value;
+        pointer.pos[2] = document.getElementById("posz").value;
+        pointer.rot[0] = document.getElementById("rotx").value;
+        pointer.rot[1] = document.getElementById("roty").value;
+        pointer.rot[2] = document.getElementById("rotz").value;
+        pointer.scale[0] = document.getElementById("scalex").value;
+        pointer.scale[1] = document.getElementById("scaley").value;
+        pointer.scale[2] = document.getElementById("scalez").value;
     }
     setTimeout(lp, 4);
 }
