@@ -1,9 +1,9 @@
 class JMaterial{
-    constructor(albedo, roughness, metalic, AO, normal, label){
+    constructor(albedo, roughness, metalic, ao, normal, label){
         this.albedo = albedo;
         this.roughness = roughness;
         this.metalic = metalic;
-        this.ao = AO;
+        this.ao = ao;
         this.normal = normal;
         this.label = label;
     }
@@ -86,6 +86,120 @@ var lts = [];
 var spks = [];
 
 var selected = -1;
+
+var input = document.createElement('input');
+input.type = 'file';
+input.accept = ".txt";
+input.style.display = "none";
+
+input.onchange = e => { 
+    var file = e.target.files[0];
+    var reader = new FileReader();
+    reader.readAsText(file);
+    reader.onload = function () {
+        var objn = 0;
+        var audn = 0;
+        var ltn = 0;
+        var matnm = 0;
+        var modeltext = reader.result;
+        var st = modeltext.split('\n').join(' ').split(' ');
+        console.log("SDFLoader: SepSceneSize="+ st.length);
+        for(var i = 0; i != st.length; i+=1){
+            if(st[i] == "md"){ 
+                console.log("SDFLoader: found model mesh at index ="+ i);
+                let mid = st[i+2];
+                let xp = parseFloat(st[i+3]);
+                let yp = parseFloat(st[i+4]);
+                let zp = parseFloat(st[i+5]);
+                let xr = parseFloat(st[i+6]);
+                let yr = parseFloat(st[i+7]);
+                let zr = parseFloat(st[i+8]);
+                let xs = parseFloat(st[i+9]);
+                let ys = parseFloat(st[i+10]);
+                let zs = parseFloat(st[i+11]);
+                objs.push(new JObject(xp, yp, zp, xr, yr, zr, xs, ys, zs, "Object" + objn, "md"+mid, objn));
+                objn += 1;
+            }
+            if(st[i] == "cs"){ 
+                console.log("SDFLoader: found cube mesh at index ="+ i);
+                let xp = parseFloat(st[i+2]);
+                let yp = parseFloat(st[i+3]);
+                let zp = parseFloat(st[i+4]);
+                let xr = parseFloat(st[i+5]);
+                let yr = parseFloat(st[i+6]);
+                let zr = parseFloat(st[i+7]);
+                let xs = parseFloat(st[i+8]);
+                let ys = parseFloat(st[i+9]);
+                let zs = parseFloat(st[i+10]);
+                objs.push(new JObject(xp, yp, zp, xr, yr, zr, xs, ys, zs, "Object" + objn, "-1", objn));
+                objn += 1;
+            }
+            if(st[i] == "cu"){ 
+                console.log("SDFLoader: found cubeuv mesh at index ="+ i);
+                let xp = parseFloat(st[i+2]);
+                let yp = parseFloat(st[i+3]);
+                let zp = parseFloat(st[i+4]);
+                let xr = parseFloat(st[i+5]);
+                let yr = parseFloat(st[i+6]);
+                let zr = parseFloat(st[i+7]);
+                let xs = parseFloat(st[i+8]);
+                let ys = parseFloat(st[i+9]);
+                let zs = parseFloat(st[i+10]);
+                objs.push(new JObject(xp, yp, zp, xr, yr, zr, xs, ys, zs, "Object" + objn, "-2", objn));
+                objn += 1;
+            }
+            if(st[i] == "pl"){ 
+                let xp = parseFloat(st[i+2]);
+                let yp = parseFloat(st[i+3]);
+                let zp = parseFloat(st[i+4]);
+                let xr = parseFloat(st[i+5]);
+                let yr = parseFloat(st[i+6]);
+                let zr = parseFloat(st[i+7]);
+                let xs = parseFloat(st[i+8]);
+                let ys = parseFloat(st[i+9]);
+                let zs = parseFloat(st[i+10]);
+                objs.push(new JObject(xp, yp, zp, xr, yr, zr, xs, ys, zs, "Object" + objn, "-3", objn));
+                objn += 1;
+                console.log("SDFLoader: found plane mesh at index ="+ i);
+            }
+            if(st[i] == "lt"){ 
+                let xp = parseFloat(st[i+1]);
+                let yp = parseFloat(st[i+2]);
+                let zp = parseFloat(st[i+3]);
+                let xr = parseFloat(st[i+4]);
+                let yr = parseFloat(st[i+5]);
+                let zr = parseFloat(st[i+6]);
+                let xs = parseFloat(st[i+7]);
+                let ys = parseFloat(st[i+8]);
+                let zs = parseFloat(st[i+9]);
+                lts.push(new JLight(xp, yp, zp, xr, yr, zr, xs, ys, zs, "Light" + ltn));
+                ltn += 1;
+                console.log("SDFLoader: found light at index ="+ i);
+            }
+            if(st[i] == "sp"){ 
+                let aid = parseFloat(st[i+1]);
+                let pw = parseFloat(st[i+2]);
+                let wl = parseFloat(st[i+3]);
+                let xp = parseFloat(st[i+5]);
+                let yp = parseFloat(st[i+6]);
+                let zp = parseFloat(st[i+7]);
+                spks.push(new JAudio(xp, yp, zp, pw, wl, "Speaker"+audn, "spk"+aid));
+                audn += 1;
+                console.log("SDFLoader: found speaker at index ="+ i);
+            }
+            if(st[i] == "mat"){ 
+                console.log("SDFLoader: found material at index ="+ i);
+                mats.push(new JMaterial("tex"+st[i+6], "tex"+st[i+7], "tex"+st[i+8], "tex"+st[i+9], "tex"+st[i+10], "mat"+matnm));
+                matnm += 1;
+            }
+        }
+        ch = [true, true, true, true, true];
+    }
+}
+
+document.getElementById("load").addEventListener("click", () => {
+    input.click();
+});
 
 document.getElementById("alb_btn").addEventListener("click", () => {
     mif[0] = document.getElementById("lst_img").value;
@@ -281,7 +395,7 @@ document.getElementById("save").addEventListener("click", () => {
         sdf += `lt 0 ` + posrotscale;
     }
     for(var i = 0; i != spks.length; i+=1){
-        var posrotscale = spks[i].power + ` ` + spks[i].volume + ` ` + spks[i].pos[2] + ` ` + spks[i].pos[1] + ` ` + spks[i].pos[0] + `
+        var posrotscale = spks[i].power + ` ` + spks[i].volume + ` 1 ` + spks[i].pos[2] + ` ` + spks[i].pos[1] + ` ` + spks[i].pos[0] + `
         `;
         sdf += `sp ` + Number(spks[i].audio.replace("spk", "")) + ` ` + posrotscale;
     }
