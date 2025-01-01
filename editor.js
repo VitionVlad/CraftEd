@@ -83,19 +83,19 @@ var audio_lb = [];
 
 var mats = [];
 
-var ch = [false, false, false, false, false];
+var ch = [true, true, true, true, true];
 
 var mif = ["", "", "", "", ""];
 
 var objs = [];
 
-var lts = [];
+var lts = [ new JLight(0, 0, 0, 0, 0, 0, 1, 1, 1, "Light0") ];
 
 var spks = [];
 
 var selected = -1;
 
-var pointer = new JPointer(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+var pointer = new JPointer(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
 
 var input = document.createElement('input');
 input.type = 'file';

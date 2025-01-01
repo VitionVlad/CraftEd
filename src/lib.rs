@@ -25,6 +25,7 @@ extern {
   pub fn getrscale() -> f32;
   pub fn get_mouse_lock() -> bool;
   pub fn get_elem_ch(id: &str) -> bool;
+  pub fn get_val(g: i32, i: i32, f: i32, p: i32) -> f32;
 }
 
 #[wasm_bindgen]
@@ -85,6 +86,11 @@ pub fn main() {
       eng.cameras[0].physic_object.acceleration.y = 0.0f32;
     }
     eng.cameras[0].physic_object.solid = !get_elem_ch("noclipch");
+
+    pointer.physic_object.pos = Vec3::newdefined(get_val(0, 0, 0, 0), get_val(0, 0, 0, 1), get_val(0, 0, 0, 2));
+    pointer.physic_object.rot = Vec3::newdefined(get_val(0, 0, 1, 0), get_val(0, 0, 1, 1), get_val(0, 0, 1, 2));
+    pointer.physic_object.scale = Vec3::newdefined(get_val(0, 0, 2, 0), get_val(0, 0, 2, 1), get_val(0, 0, 2, 2));
+
     eng.start();
 
     if get_mouse_lock(){
