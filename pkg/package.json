@@ -1,0 +1,14 @@
+{
+  "name": "crafted",
+  "version": "1.0.0",
+  "files": [
+    "crafted_bg.wasm",
+    "crafted.js",
+    "crafted.d.ts"
+  ],
+  "module": "crafted.js",
+  "types": "crafted.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}

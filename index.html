@@ -1,245 +1,261 @@
 <DOCTYPE html>
-    <head>
-        <title>CraftEd</title>
-        <style>
-            #render {
-                background-color: #000;
-                display: block;
-                position: absolute;
-                top: 0;
-                bottom: 0;
-                left: 0%;
-                right: 0%;
-                height: 100%;
-                width: 100%;
-            }
-            #list_div {
-                background-color: #2525255d;
-                display: block;
-                position: absolute;
-                top: 0%;
-                left: 0%;
-                height: 80%;
-                width: 320px;
-                outline: 5px solid #3b3b3b;
-            }
-            #lst {
-                color: #FFF;
-                background-color: #ffffff00;
-                display: block;
-                position: absolute;
-                bottom: 0%;
-                left: 0%;
-                height: 90%;
-                width: 320px;
-                border: none;
-                outline: none;
-                scroll-behavior: smooth;
-            }
-            .lstl {
-                color: #FFF;
-                background-color: #474747;
-                width: 160px;
-                height: 18px;
-                right: 0%;
-                float: right;
-                border: none;
-                outline: none;
-                scroll-behavior: smooth;
-            }
-            #file_div {
-                background-color: #2525255d;
-                display: block;
-                position: absolute;
-                top: 80%;
-                left: 0%;
-                height: 20%;
-                width: 320px;
-                outline: 5px solid #3b3b3b;
-            }
-            #obj_div {
-                background-color: #2525255d;
-                display: block;
-                position: absolute;
-                top: 0%;
-                right: 0%;
-                height: 33%;
-                width: 320px;
-                outline: 5px solid #3b3b3b;
-            }
-            #assets_div {
-                background-color: #2525255d;
-                display: block;
-                position: absolute;
-                top: 33%;
-                right: 0%;
-                height: 33%;
-                width: 320px;
-                outline: 5px solid #3b3b3b;
-                text-align: center;
-            }
-            #settings_div {
-                background-color: #2525255d;
-                display: block;
-                position: absolute;
-                top: 66%;
-                right: 0%;
-                height: 34%;
-                width: 320px;
-                outline: 5px solid #3b3b3b;
-            }
-            .t1 {
-                color: #FFF;
-                font-size: 18px;
-                text-align: center;
-                padding: 2px;
-                margin: 2px;
-                -webkit-user-select: none;       
-                -moz-user-select: none;
-                -ms-user-select: none;
-                user-select: none;
-            }
-            .t2 {
-                color: #FFF;
-                font-size: 18px;
-                width: 160px;
-                padding: 0%;
-                margin: 0%;
-                left: 0%;
-                float: left;
-                text-align: center;
-                -webkit-user-select: none;       
-                -moz-user-select: none;
-                -ms-user-select: none;
-                user-select: none;
-            }
-            .b1 {
-                background-color: #2525255d;
-                color: #FFF;
-                font-size: 18px;
-                text-align: center;
-                width: 100%;
-            }
-            .b2 {
-                background-color: #2525255d;
-                color: #FFF;
-                font-size: 16px;
-                text-align: center;
-                width: 100px;
-                float: center;
-            }
-            .inp1 {
-                color: #FFF;
-                background-color: #474747;
-                width: 53px;
-                height: 24px;
-                right: 0%;
-                float: right;
-                border: none;
-                outline: none;
-                scroll-behavior: smooth;
-            }
-            ::placeholder {
-              color: white;
-              opacity: 1;
-            }
+  <head>
+      <title>CraftEd</title>
+      <style>
+          #render {
+              background-color: #000;
+              display: block;
+              position: absolute;
+              top: 0;
+              bottom: 0;
+              left: 0%;
+              right: 0%;
+              height: 100%;
+              width: 100%;
+          }
+          #list_div {
+              background-color: #2525255d;
+              display: block;
+              position: absolute;
+              top: 0%;
+              left: 0%;
+              height: 80%;
+              width: 320px;
+              outline: 5px solid #3b3b3b;
+          }
+          #lst {
+              color: #FFF;
+              background-color: #ffffff00;
+              display: block;
+              position: absolute;
+              bottom: 0%;
+              left: 0%;
+              height: 90%;
+              width: 320px;
+              border: none;
+              outline: none;
+              scroll-behavior: smooth;
+          }
+          .lstl {
+              color: #FFF;
+              background-color: #474747;
+              width: 160px;
+              height: 18px;
+              right: 0%;
+              float: right;
+              border: none;
+              outline: none;
+              scroll-behavior: smooth;
+          }
+          #file_div {
+              background-color: #2525255d;
+              display: block;
+              position: absolute;
+              top: 80%;
+              left: 0%;
+              height: 20%;
+              width: 320px;
+              outline: 5px solid #3b3b3b;
+          }
+          #obj_div {
+              background-color: #2525255d;
+              display: block;
+              position: absolute;
+              top: 0%;
+              right: 0%;
+              height: 33%;
+              width: 320px;
+              outline: 5px solid #3b3b3b;
+          }
+          #assets_div {
+              background-color: #2525255d;
+              display: block;
+              position: absolute;
+              top: 33%;
+              right: 0%;
+              height: 33%;
+              width: 320px;
+              outline: 5px solid #3b3b3b;
+              text-align: center;
+          }
+          #settings_div {
+              background-color: #2525255d;
+              display: block;
+              position: absolute;
+              top: 66%;
+              right: 0%;
+              height: 34%;
+              width: 320px;
+              outline: 5px solid #3b3b3b;
+          }
+          .t1 {
+              color: #FFF;
+              font-size: 18px;
+              text-align: center;
+              padding: 2px;
+              margin: 2px;
+              -webkit-user-select: none;       
+              -moz-user-select: none;
+              -ms-user-select: none;
+              user-select: none;
+          }
+          .t2 {
+              color: #FFF;
+              font-size: 18px;
+              width: 160px;
+              padding: 0%;
+              margin: 0%;
+              left: 0%;
+              float: left;
+              text-align: center;
+              -webkit-user-select: none;       
+              -moz-user-select: none;
+              -ms-user-select: none;
+              user-select: none;
+          }
+          .b1 {
+              background-color: #2525255d;
+              color: #FFF;
+              font-size: 18px;
+              text-align: center;
+              width: 100%;
+          }
+          .b2 {
+              background-color: #2525255d;
+              color: #FFF;
+              font-size: 16px;
+              text-align: center;
+              width: 100px;
+              float: center;
+          }
+          .inp1 {
+              color: #FFF;
+              background-color: #474747;
+              width: 53px;
+              height: 24px;
+              right: 0%;
+              float: right;
+              border: none;
+              outline: none;
+              scroll-behavior: smooth;
+          }
+          ::placeholder {
+            color: white;
+            opacity: 1;
+          }
 
-            ::-ms-input-placeholder {
-              color: white;
-            }
-        </style>
-    </head>
-    <body style="background-color: #080808;">
-        <canvas id="render" onclick="document.getElementById('render').requestPointerLock()"></canvas>
-        <div id="list_div">
-            <p id="list_p" class="t1"> Object list </p>
-            <select id="lst" multiple>
-                <option value="pit">Pointer</option>
-                <optgroup id="lst_obj" label="Objects">
-                </optgroup>
-                <optgroup id="lst_ls" label="Light sources">
-                </optgroup>
-                <optgroup id="lst_spk" label="Speakers">
-                </optgroup>
-            </select>
-        </div>
-        <div id="file_div">
-            <p id="file_p" class="t1"> File </p>
-            <button class="b1" id="save">Export</button>
-            <button class="b1" id="load">Import SDF</button>
-        </div>
-        <div id="obj_div">
-            <p id="obj_p" class="t1"> Object </p>
-            <input type="text" style="background-color: #474747; color: white; font-size: 14px; width: 100%;" id="obj_label" name="objlabel" required minlength="1" placeholder="Object label"/>
-            <p id="list_md" class="t2"> Model </p>
-            <select id="lst_mdn" class="lstl">
-                <optgroup id="lst_built_ass" label="Built in">
-                    <option value="-1">Cube</option>
-                    <option value="-2">CubeUV</option>
-                    <option value="-3">Plane</option>
-                    <option value="-4">Light</option>
-                    <!--<option value="-5">Light(no shadows)</option>-->
-                </optgroup>
-                <optgroup id="lst_md_ass" label="Models">
-                </optgroup>
-                <optgroup id="lst_spk_ass" label="Audio">
-                </optgroup>
-            </select>
-            <select id="lst_mts" class="lstl">
-                <optgroup id="lst_mt_ass" label="Materials">
-                </optgroup>
-            </select>
-            <p id="list_mt" class="t2"> Material </p>
-            <input type="number" class="inp1" id="posx" value="0">
-            <input type="number" class="inp1" id="posy" value="0">
-            <input type="number" class="inp1" id="posz" value="0">
-            <p id="pos" class="t2"> Position </p>
-            <input type="number" class="inp1" id="rotx" value="0">
-            <input type="number" class="inp1" id="roty" value="0">
-            <input type="number" class="inp1" id="rotz" value="0">
-            <p id="rot" class="t2"> Rotation </p>
-            <input type="number" class="inp1" id="scalex" value="1">
-            <input type="number" class="inp1" id="scaley" value="1">
-            <input type="number" class="inp1" id="scalez" value="1">
-            <p id="scale_p" class="t2"> Scale </p>
-            <button class="b1" id="create">Create</button>
-            <button class="b1" id="apply">Apply</button>
-        </div>
-        <div id="assets_div">
-            <p id="assets_p" class="t1"> Assets </p>
-            <label style="color: white; font-size: 18px;" for="md_sel">Choose a asset to import:</label>
-            <input style="color: white; font-size: 14px;" type="file" id="md_sel" name="md_sel" accept=".txt,.png,.jpg,.mp3,.ogg"/>
-            <button class="b1" id="import_md">Import asset</button>
-            <select id="lst_img" class="lstl">
-                <optgroup id="lst_img_ass" label="Textures">
-                </optgroup>
-            </select>
-            <p id="list_img" class="t2"> Texture </p>
-            <input type="text" style="background-color: #474747; color: white; font-size: 14px; width: 100%;" id="mt_label" name="mtlabel" required minlength="1" placeholder="Material label"/>
-            <button class="b2" id="alb_btn">Albedo</button>
-            <button class="b2" id="rough_btn">Roughness</button>
-            <button class="b2" id="met_btn">Metalic</button>
-            <button class="b2" id="ao_btn">AO</button>
-            <button class="b2" id="norm_btn">Normal</button>
-            <button class="b2" id="crt">Create</button>
-        </div>
-        <div id="settings_div">
-            <p id="settings_p" class="t1"> Settings </p>
-            <input style="width: 200px; width: 200px;" type="range" id="volume" name="volume" min="0" max="10" value="5"/>
-            <label style="color: white; font-size: 16px; display: inline-block; width: 110px;" for="volume">Volume</label>
-            <input style="width: 200px; width: 200px;" type="range" id="rscale" name="rscale" min="2" max="10" value="10"/>
-            <label style="color: white; font-size: 16px; display: inline-block; width: 110px;" for="rscale">Render scale</label>
-            <input style="width: 200px; width: 200px;" type="range" id="sres" name="sres" min="0" max="3" />
-            <label style="color: white; font-size: 16px; display: inline-block; width: 110px;" for="sres">Shadows quality</label>
-            <input style="width: 200px; width: 200px;" type="range" id="fovs" name="fovs" min="60" max="110" value="90"/>
-            <label style="color: white; font-size: 16px; display: inline-block; width: 110px;" for="fovs" id="fovl">FOV</label>
-            <input type="checkbox" id="pps" name="pps" checked />
-            <label style="color: white; font-size: 16px;" for="pps">Player physics</label>
-            <input type="checkbox" id="noclip" name="noclip" checked />
-            <label style="color: white; font-size: 16px;" for="noclip">Noclip</label>
-            <input type="checkbox" id="uppnr" name="uppnr" checked />
-            <label style="color: white; font-size: 16px;" for="uppnr">Use player position and rotation</label>
-        </div>
-        <script src="editor.js"></script>
-    </body>
+          ::-ms-input-placeholder {
+            color: white;
+          }
+      </style>
+  </head>
+  <body style="background-color: #080808;">
+      <canvas id="render" onclick="document.getElementById('render').requestPointerLock()"></canvas>
+      <div id="list_div">
+          <p id="list_p" class="t1"> Object list </p>
+          <select id="lst" multiple>
+              <option value="pit">Pointer</option>
+              <optgroup id="lst_obj" label="Objects">
+              </optgroup>
+              <optgroup id="lst_ls" label="Light sources">
+              </optgroup>
+              <optgroup id="lst_spk" label="Speakers">
+              </optgroup>
+          </select>
+      </div>
+      <div id="file_div">
+          <p id="file_p" class="t1"> File </p>
+          <button class="b1" id="save">Export</button>
+          <button class="b1" id="load">Import SDF</button>
+      </div>
+      <div id="obj_div">
+          <p id="obj_p" class="t1"> Object </p>
+          <input type="text" style="background-color: #474747; color: white; font-size: 14px; width: 100%;" id="obj_label" name="objlabel" required minlength="1" placeholder="Object label"/>
+          <p id="list_md" class="t2"> Model </p>
+          <select id="lst_mdn" class="lstl">
+              <optgroup id="lst_built_ass" label="Built in">
+                  <option value="-1">Cube</option>
+                  <option value="-2">CubeUV</option>
+                  <option value="-3">Plane</option>
+                  <option value="-4">Light</option>
+                  <!--<option value="-5">Light(no shadows)</option>-->
+              </optgroup>
+              <optgroup id="lst_md_ass" label="Models">
+              </optgroup>
+              <optgroup id="lst_spk_ass" label="Audio">
+              </optgroup>
+          </select>
+          <select id="lst_mts" class="lstl">
+              <optgroup id="lst_mt_ass" label="Materials">
+              </optgroup>
+          </select>
+          <p id="list_mt" class="t2"> Material </p>
+          <input type="number" class="inp1" id="posx" value="0">
+          <input type="number" class="inp1" id="posy" value="0">
+          <input type="number" class="inp1" id="posz" value="0">
+          <p id="pos" class="t2"> Position </p>
+          <input type="number" class="inp1" id="rotx" value="0">
+          <input type="number" class="inp1" id="roty" value="0">
+          <input type="number" class="inp1" id="rotz" value="0">
+          <p id="rot" class="t2"> Rotation </p>
+          <input type="number" class="inp1" id="scalex" value="1">
+          <input type="number" class="inp1" id="scaley" value="1">
+          <input type="number" class="inp1" id="scalez" value="1">
+          <p id="scale_p" class="t2"> Scale </p>
+          <button class="b1" id="create">Create</button>
+          <button class="b1" id="apply">Apply</button>
+      </div>
+      <div id="assets_div">
+          <p id="assets_p" class="t1"> Assets </p>
+          <label style="color: white; font-size: 18px;" for="md_sel">Choose a asset to import:</label>
+          <input style="color: white; font-size: 14px;" type="file" id="md_sel" name="md_sel" accept=".txt,.png,.jpg,.mp3,.ogg"/>
+          <button class="b1" id="import_md">Import asset</button>
+          <select id="lst_img" class="lstl">
+              <optgroup id="lst_img_ass" label="Textures">
+              </optgroup>
+          </select>
+          <p id="list_img" class="t2"> Texture </p>
+          <input type="text" style="background-color: #474747; color: white; font-size: 14px; width: 100%;" id="mt_label" name="mtlabel" required minlength="1" placeholder="Material label"/>
+          <button class="b2" id="alb_btn">Albedo</button>
+          <button class="b2" id="rough_btn">Roughness</button>
+          <button class="b2" id="met_btn">Metalic</button>
+          <button class="b2" id="ao_btn">AO</button>
+          <button class="b2" id="norm_btn">Normal</button>
+          <button class="b2" id="crt">Create</button>
+      </div>
+      <div id="settings_div">
+          <p id="settings_p" class="t1"> Settings </p>
+          <input style="width: 200px; width: 200px;" type="range" id="volume" name="volume" min="0" max="10" value="5"/>
+          <label style="color: white; font-size: 16px; display: inline-block; width: 110px;" for="volume">Volume</label>
+          <input style="width: 200px; width: 200px;" type="range" id="rscale" name="rscale" min="2" max="10" value="10"/>
+          <label style="color: white; font-size: 16px; display: inline-block; width: 110px;" for="rscale">Render scale</label>
+          <input style="width: 200px; width: 200px;" type="range" id="sres" name="sres" min="0" max="3" value="1" />
+          <label style="color: white; font-size: 16px; display: inline-block; width: 110px;" for="sres">Shadows quality</label>
+          <input style="width: 200px; width: 200px;" type="range" id="fovs" name="fovs" min="60" max="110" value="90"/>
+          <label style="color: white; font-size: 16px; display: inline-block; width: 110px;" for="fovs" id="fovl">FOV</label>
+          <input type="checkbox" id="ppsch" name="pps" />
+          <label style="color: white; font-size: 16px;" for="pps">Player physics</label>
+          <input type="checkbox" id="noclipch" name="noclip" />
+          <label style="color: white; font-size: 16px;" for="noclip">Noclip</label>
+      </div>
+      <script src="editor.js"></script>
+      <script type="module">
+        import init, { main } from "./pkg/crafted.js";
+        console.log("Loading assets...");
+        if (document.readyState === "complete"){
+          console.log("Already loaded...");
+          init().then(() => {
+            main();
+          });
+        }else{
+          console.log("Still Loading...");
+          window.addEventListener("load", (event) => {
+            console.log("Already loaded...");
+            init().then(() => {
+              main();
+            });
+          });
+        }
+      </script>
+  </body>
 </DOCTYPE>
