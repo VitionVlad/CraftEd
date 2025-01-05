@@ -50,7 +50,9 @@ export function get_val(g, i, f, p){
                 case 4:
                     return Number(objs[i].material);
                 case 5:
-                    return Number(objs[i].ch);
+                    let tch = objs[i].ch;
+                    objs[i].ch = false;
+                    return Number(tch);
             }
             break;
         case 2:
@@ -94,9 +96,9 @@ export function get_val(g, i, f, p){
                     return Number(mats[i].roughness.replace("tex", ""));
                 case 2:
                     return Number(mats[i].metalic.replace("tex", ""));
-                case 4:
+                case 3:
                     return Number(mats[i].ao.replace("tex", ""));
-                case 5:
+                case 4:
                     return Number(mats[i].normal.replace("tex", ""));
             }
             break;

@@ -270,6 +270,7 @@ document.getElementById("create").addEventListener("click", () => {
             label = "Object"+objs.length;
         }
         if(document.getElementById("lst_mts").value != ""){
+            console.log(mats[Number(document.getElementById("lst_mts").value)].albedo + " " + mats[Number(document.getElementById("lst_mts").value)].roughness + " " + mats[Number(document.getElementById("lst_mts").value)].metalic + " " + mats[Number(document.getElementById("lst_mts").value)].ao + " " + mats[Number(document.getElementById("lst_mts").value)].normal);
             objs.push(new JObject(Number(pos[0]), Number(pos[1]), Number(pos[2]), Number(rot[0]), Number(rot[1]), Number(rot[2]), Number(scale[0]), Number(scale[1]), Number(scale[2]), label, document.getElementById("lst_mdn").value, Number(document.getElementById("lst_mts").value)));
         }
     }
@@ -337,12 +338,14 @@ document.getElementById("import_md").addEventListener("click", () => {
                 model_lb.push(elem.files[i].name);
                 ch[0] = true;
                 var reader = new FileReader();
-                reader.readAsDataURL(elem.files[i]);
+                reader.readAsText(elem.files[i]);
                 reader.onload = function () {
-                    var md = document.createElement("iframe");
+                    var md = document.createElement("p");
                     md.id = "md" + model_lb.length;
-                    md.src = reader.result;
+                    md.textContent = reader.result;
                     md.style = "display: none;";
+                    md.crossOrigin = "";
+                    document.body.appendChild(md);
                     console.log("model parsing done!");
                     htmlcont += `<iframe src="models/` + model_lb[model_lb.length-1] + `" id="` + md.id + `"></iframe>
                     `;
@@ -358,6 +361,8 @@ document.getElementById("import_md").addEventListener("click", () => {
                     md.id = "tex" + tex_lb.length;
                     md.src = reader.result;
                     md.style = "display: none;";
+                    md.crossOrigin = "";
+                    document.body.appendChild(md);
                     console.log("image parsing done!");
                     htmlcont += `<img src="textures/` + tex_lb[tex_lb.length-1] + `" id="` + md.id + `"></img>
                     `;
@@ -373,6 +378,8 @@ document.getElementById("import_md").addEventListener("click", () => {
                     md.id = "spk" + audio_lb.length;
                     md.src = reader.result;
                     md.style = "display: none;";
+                    md.crossOrigin = "";
+                    document.body.appendChild(md);
                     console.log("audio parsing done!");
                     htmlcont += `<audio src="audio/` + audio_lb[audio_lb.length-1] + `" id="` + md.id + `"></audio>
                     `;
