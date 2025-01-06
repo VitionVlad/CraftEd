@@ -97,6 +97,8 @@ var selected = -1;
 
 var pointer = new JPointer(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
 
+var cam = [ 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ];
+
 var input = document.createElement('input');
 input.type = 'file';
 input.accept = ".txt";
@@ -253,6 +255,20 @@ document.getElementById("create").addEventListener("click", () => {
         if(label == ""){
             label = "Light"+lts.length;
         }
+        if(document.getElementById("uppch").checked){
+            pos[0] = cam[0];
+            pos[1] = cam[1];
+            pos[2] = cam[2];
+            rot[0] = cam[3];
+            rot[1] = cam[4];
+            rot[2] = cam[5];
+            document.getElementById("posx").value = cam[0];
+            document.getElementById("posy").value = cam[1];
+            document.getElementById("posz").value = cam[2];
+            document.getElementById("rotx").value = cam[3];
+            document.getElementById("roty").value = cam[4];
+            document.getElementById("rotz").value = cam[5];
+        }
         lts.push(new JLight(Number(pos[0]), Number(pos[1]), Number(pos[2]), Number(rot[0]), Number(rot[1]), Number(rot[2]), Number(scale[0]), Number(scale[1]), Number(scale[2]), label));
         cb = true;
     }
@@ -300,7 +316,7 @@ document.getElementById("apply").addEventListener("click", () => {
             alert("Types must coincide");
         }
     }else if(namsep[0] == "a" && namsep[1] == "u" && namsep[2] == "d"){
-        nam = Number(nam.replace("obj", ""));
+        nam = Number(nam.replace("aud", ""));
         var tc = document.getElementById("lst_mdn").value.split("");
         if(tc[0] == "s" && tc[1] == "p" && tc[2] == "k"){
             if(label == ""){
@@ -311,11 +327,25 @@ document.getElementById("apply").addEventListener("click", () => {
             alert("Types must coincide");
         }
     }else if(namsep[0] == "l" && namsep[1] == "t"){
-        nam = Number(nam.replace("obj", ""));
+        nam = Number(nam.replace("lt", ""));
         var tc = document.getElementById("lst_mdn").value;
         if(tc == "-4" || tc == "-5"){
             if(label == ""){
                 label = lts[nam].label;
+            }
+            if(document.getElementById("uppch").checked){
+                pos[0] = cam[0];
+                pos[1] = cam[1];
+                pos[2] = cam[2];
+                rot[0] = cam[3];
+                rot[1] = cam[4];
+                rot[2] = cam[5];
+                document.getElementById("posx").value = cam[0];
+                document.getElementById("posy").value = cam[1];
+                document.getElementById("posz").value = cam[2];
+                document.getElementById("rotx").value = cam[3];
+                document.getElementById("roty").value = cam[4];
+                document.getElementById("rotz").value = cam[5];
             }
             lts[nam] = new JLight(Number(pos[0]), Number(pos[1]), Number(pos[2]), Number(rot[0]), Number(rot[1]), Number(rot[2]), Number(scale[0]), Number(scale[1]), Number(scale[2]), label);
         }else{

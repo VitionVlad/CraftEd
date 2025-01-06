@@ -105,3 +105,12 @@ export function get_val(g, i, f, p){
     }
     return 0;
 }
+
+export function set_cam_pos(posx, posy, posz, rotx, roty, rotz){
+    cam[0] = posx;
+    cam[1] = posy;
+    cam[2] = posz;
+    cam[3] = rotx;
+    cam[4] = roty;
+    cam[5] = rotz;
+}

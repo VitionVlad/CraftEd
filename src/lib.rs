@@ -29,12 +29,14 @@ extern {
   pub fn get_mouse_lock() -> bool;
   pub fn get_elem_ch(id: &str) -> bool;
   pub fn get_val(g: i32, i: i32, f: i32, p: i32) -> f32;
+  pub fn set_cam_pos(posx: f32, posy: f32, posz: f32, rotx: f32, roty: f32, rotz: f32);
 }
 
 #[wasm_bindgen]
 pub fn main() {
   const SPEED: f32 = 0.01f32;
   let mut eng: Engine = Engine::new("render");
+  eng.lights[0] = Light::new(engine::light::LightType::Spot);
 
   let mut matgen = MaterialGenerator::new(vec![]);
   matgen.gen_vertex();
@@ -101,6 +103,7 @@ pub fn main() {
   eng.cameras[0].physic_object.gravity = false;
 
   logic_loop(Closure::new(move || {
+    set_cam_pos(eng.cameras[0].physic_object.pos.x, eng.cameras[0].physic_object.pos.y, eng.cameras[0].physic_object.pos.z, eng.cameras[0].physic_object.rot.x, eng.cameras[0].physic_object.rot.y, eng.cameras[0].physic_object.rot.z);
     eng.audioctx.volume = getvol()*10f32;
     eng.cameras[0].fov = getfov();
     eng.renderscale = getrscale()/10f32;
@@ -119,22 +122,17 @@ pub fn main() {
       if i >= eng.lights.len(){
         eng.lights.push(Light::new(engine::light::LightType::Spot));
       }
-      if get_elem_ch("uppch"){
-        eng.lights[i].pos = eng.cameras[0].physic_object.pos;
-        eng.lights[i].rot = eng.cameras[0].physic_object.rot;
-      }else{
-        eng.lights[i].pos = Vec3::newdefined(get_val(2, i as i32, 0, 0), get_val(2, i as i32, 0, 1), get_val(2, i as i32, 0, 2));
-        eng.lights[i].rot = Vec3::newdefined(get_val(2, i as i32, 1, 0), get_val(2, i as i32, 1, 1), get_val(2, i as i32, 1, 2));
-      }
+      eng.lights[i].pos = Vec3::newdefined(get_val(2, i as i32, 0, 0), get_val(2, i as i32, 0, 1), get_val(2, i as i32, 0, 2));
+      eng.lights[i].rot = Vec3::newdefined(get_val(2, i as i32, 1, 0), get_val(2, i as i32, 1, 1), get_val(2, i as i32, 1, 2));
       eng.lights[i].color = Vec3::newdefined(get_val(2, i as i32, 2, 0), get_val(2, i as i32, 2, 1), get_val(2, i as i32, 2, 2));
     }
 
     for i in 0..(get_val(5, -1, 0, 0) as usize){
       let mut tid = "".to_string();
       for b in 0..4{
-        tid+=&("tex".to_string()+&(get_val(5, 0, b, 0) as i32).to_string()+";");
+        tid+=&("tex".to_string()+&(get_val(5, i as i32, b, 0) as i32).to_string()+";");
       }
-      tid+=&("tex".to_string()+&(get_val(5, 0, 4, 0) as i32).to_string());
+      tid+=&("tex".to_string()+&(get_val(5, i as i32, 4, 0) as i32).to_string());
       if i >= mats.len(){
         mats.push(matgen.generate_material(tid, "".to_string()));
       }else{
@@ -148,6 +146,7 @@ pub fn main() {
         scene.all_objects.push(Object::new(&mut eng, md.arr, &mats[get_val(1, i as i32, 4, 0) as usize], engine::render::mesh::MUsages::ShadowAndMain, true));
       }
       if get_val(1, i as i32, 5, 0) == 1.0f32{
+        scene.all_objects[i].allow_replacing(&mut eng);
         let md = Objreader::new(&("md".to_string()+&(get_val(1, i as i32, 3, 0) as i32).to_string()));
         scene.all_objects[i] = Object::new(&mut eng, md.arr, &mats[get_val(1, i as i32, 4, 0) as usize], engine::render::mesh::MUsages::ShadowAndMain, true);
       }
