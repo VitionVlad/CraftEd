@@ -1,4 +1,4 @@
-use engine::cube::CUBE;
+use engine::cube::{CUBE, CUBEUV};
 use engine::engine::Engine;
 use engine::light::Light;
 //use engine::light::Light;
@@ -142,13 +142,32 @@ pub fn main() {
 
     for i in 0..(get_val(1, -1, 0, 0) as usize){
       if i >= scene.all_objects.len(){
-        let md = Objreader::new(&("md".to_string()+&(get_val(1, i as i32, 3, 0) as i32).to_string()));
-        scene.all_objects.push(Object::new(&mut eng, md.arr, &mats[get_val(1, i as i32, 4, 0) as usize], engine::render::mesh::MUsages::ShadowAndMain, true));
+        if get_val(1, i as i32, 3, 0) == -1.0{
+          scene.all_objects.push(Object::new(&mut eng, CUBE.to_vec(), &mats[get_val(1, i as i32, 4, 0) as usize], engine::render::mesh::MUsages::ShadowAndMain, true));
+        }else if get_val(1, i as i32, 3, 0) == -2.0{
+          scene.all_objects.push(Object::new(&mut eng, CUBEUV.to_vec(), &mats[get_val(1, i as i32, 4, 0) as usize], engine::render::mesh::MUsages::ShadowAndMain, true));
+        }else if get_val(1, i as i32, 3, 0) == -3.0{
+          scene.all_objects.push(Object::new(&mut eng, PLANE.to_vec(), &mats[get_val(1, i as i32, 4, 0) as usize], engine::render::mesh::MUsages::ShadowAndMain, true));
+        }else{
+          let md = Objreader::new(&("md".to_string()+&(get_val(1, i as i32, 3, 0) as i32).to_string()));
+          scene.all_objects.push(Object::new(&mut eng, md.arr, &mats[get_val(1, i as i32, 4, 0) as usize], engine::render::mesh::MUsages::ShadowAndMain, true)); 
+        }
       }
       if get_val(1, i as i32, 5, 0) == 1.0f32{
-        scene.all_objects[i].allow_replacing(&mut eng);
-        let md = Objreader::new(&("md".to_string()+&(get_val(1, i as i32, 3, 0) as i32).to_string()));
-        scene.all_objects[i] = Object::new(&mut eng, md.arr, &mats[get_val(1, i as i32, 4, 0) as usize], engine::render::mesh::MUsages::ShadowAndMain, true);
+        if get_val(1, i as i32, 3, 0) == -1.0{
+          scene.all_objects[i].allow_replacing(&mut eng);
+          scene.all_objects[i] = Object::new(&mut eng, CUBE.to_vec(), &mats[get_val(1, i as i32, 4, 0) as usize], engine::render::mesh::MUsages::ShadowAndMain, true);
+        }else if get_val(1, i as i32, 3, 0) == -2.0{
+          scene.all_objects[i].allow_replacing(&mut eng);
+          scene.all_objects[i] = Object::new(&mut eng, CUBEUV.to_vec(), &mats[get_val(1, i as i32, 4, 0) as usize], engine::render::mesh::MUsages::ShadowAndMain, true);
+        }else if get_val(1, i as i32, 3, 0) == -3.0{
+          scene.all_objects[i].allow_replacing(&mut eng);
+          scene.all_objects[i] = Object::new(&mut eng, PLANE.to_vec(), &mats[get_val(1, i as i32, 4, 0) as usize], engine::render::mesh::MUsages::ShadowAndMain, true);
+        }else{
+          scene.all_objects[i].allow_replacing(&mut eng);
+          let md = Objreader::new(&("md".to_string()+&(get_val(1, i as i32, 3, 0) as i32).to_string()));
+          scene.all_objects[i] = Object::new(&mut eng, md.arr, &mats[get_val(1, i as i32, 4, 0) as usize], engine::render::mesh::MUsages::ShadowAndMain, true);
+        }
       }
        scene.all_objects[i].physic_object.pos = Vec3::newdefined(get_val(1, i as i32, 0, 0), get_val(1, i as i32, 0, 1), get_val(1, i as i32, 0, 2));
        scene.all_objects[i].physic_object.rot = Vec3::newdefined(get_val(1, i as i32, 1, 0), get_val(1, i as i32, 1, 1), get_val(1, i as i32, 1, 2));
