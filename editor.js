@@ -175,15 +175,15 @@ input.onchange = e => {
                 console.log("SDFLoader: found plane mesh at index ="+ i);
             }
             if(st[i] == "lt"){ 
-                let xp = parseFloat(st[i+1]);
-                let yp = parseFloat(st[i+2]);
-                let zp = parseFloat(st[i+3]);
-                let xr = parseFloat(st[i+4]);
-                let yr = parseFloat(st[i+5]);
-                let zr = parseFloat(st[i+6]);
-                let xs = parseFloat(st[i+7]);
-                let ys = parseFloat(st[i+8]);
-                let zs = parseFloat(st[i+9]);
+                let xp = parseFloat(st[i+2]);
+                let yp = parseFloat(st[i+3]);
+                let zp = parseFloat(st[i+4]);
+                let xr = parseFloat(st[i+5]);
+                let yr = parseFloat(st[i+6]);
+                let zr = parseFloat(st[i+7]);
+                let xs = parseFloat(st[i+8]);
+                let ys = parseFloat(st[i+9]);
+                let zs = parseFloat(st[i+10]);
                 lts.push(new JLight(xp, yp, zp, xr, yr, zr, xs, ys, zs, "Light" + ltn));
                 ltn += 1;
                 console.log("SDFLoader: found light at index ="+ i);
@@ -422,7 +422,7 @@ document.getElementById("import_md").addEventListener("click", () => {
 document.getElementById("save").addEventListener("click", () => {
     var sdf = ``;
     for(var i = 0; i != objs.length; i+=1){
-        var posrotscale = objs[i].pos[2] + ` ` + objs[i].pos[1] + ` ` + objs[i].pos[0] + ` ` + objs[i].rot[2] + ` ` + objs[i].rot[1] + ` ` + objs[i].rot[0] + ` ` + objs[i].scale[2] + ` ` + objs[i].scale[1] + ` ` + objs[i].scale[0] + `
+        var posrotscale = objs[i].pos[0] + ` ` + objs[i].pos[1] + ` ` + objs[i].pos[2] + ` ` + objs[i].rot[0] + ` ` + objs[i].rot[1] + ` ` + objs[i].rot[2] + ` ` + objs[i].scale[0] + ` ` + objs[i].scale[1] + ` ` + objs[i].scale[2] + `
         `;
         if(objs[i].model == "-1"){
             sdf += `cs 1 ` + posrotscale;
@@ -437,12 +437,12 @@ document.getElementById("save").addEventListener("click", () => {
         `;
     }
     for(var i = 0; i != lts.length; i+=1){
-        var posrotscale = lts[i].pos[2] + ` ` + lts[i].pos[1] + ` ` + lts[i].pos[0] + ` ` + lts[i].rot[2] + ` ` + lts[i].rot[1] + ` ` + lts[i].rot[0] + ` ` + lts[i].color[2] + ` ` + lts[i].color[1] + ` ` + lts[i].color[0] + `
+        var posrotscale = lts[i].pos[0] + ` ` + lts[i].pos[1] + ` ` + lts[i].pos[2] + ` ` + lts[i].rot[0] + ` ` + lts[i].rot[1] + ` ` + lts[i].rot[2] + ` ` + lts[i].color[0] + ` ` + lts[i].color[1] + ` ` + lts[i].color[2] + `
         `;
         sdf += `lt 0 ` + posrotscale;
     }
     for(var i = 0; i != spks.length; i+=1){
-        var posrotscale = spks[i].power + ` ` + spks[i].volume + ` 1 ` + spks[i].pos[2] + ` ` + spks[i].pos[1] + ` ` + spks[i].pos[0] + `
+        var posrotscale = spks[i].power + ` ` + spks[i].volume + ` 1 ` + spks[i].pos[0] + ` ` + spks[i].pos[1] + ` ` + spks[i].pos[2] + `
         `;
         sdf += `sp ` + Number(spks[i].audio.replace("spk", "")) + ` ` + posrotscale;
     }
