@@ -82,7 +82,9 @@ export function get_val(g, i, f, p){
                 case 2:
                     return spks[i].volume;
                 case 4:
-                    return Number(lts[i].audio.replace("spk", ""));
+                    return Number(spks[i].audio.replace("spk", ""));
+                case 5:
+                    return Number(spks[i].ch);
             }
             break;
         case 5:

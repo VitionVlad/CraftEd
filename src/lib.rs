@@ -8,6 +8,7 @@ use engine::plane::PLANE;
 use engine::render::rloop::logic_loop;
 use engine::resourceloader::resourceloader::Objreader;
 use engine::scene::Scene;
+use engine::speaker::Speaker;
 //use engine::scene::Scene;
 use wasm_bindgen::prelude::*;
 use engine::render::render::*;
@@ -99,7 +100,8 @@ pub fn main() {
 
   let mut mats: Vec<Material> = vec![];
 
-  eng.cameras[0].physic_object.pos = Vec3::newdefined(0f32, 0f32, 2f32);
+  eng.cameras[0].physic_object.pos = Vec3::newdefined(5f32, 5f32, 5f32);
+  eng.cameras[0].physic_object.rot = Vec3::newdefined(0.7f32, -0.78f32, 0f32);
   eng.cameras[0].physic_object.gravity = false;
 
   logic_loop(Closure::new(move || {
@@ -172,6 +174,24 @@ pub fn main() {
        scene.all_objects[i].physic_object.pos = Vec3::newdefined(get_val(1, i as i32, 0, 0), get_val(1, i as i32, 0, 1), get_val(1, i as i32, 0, 2));
        scene.all_objects[i].physic_object.rot = Vec3::newdefined(get_val(1, i as i32, 1, 0), get_val(1, i as i32, 1, 1), get_val(1, i as i32, 1, 2));
        scene.all_objects[i].physic_object.scale = Vec3::newdefined(get_val(1, i as i32, 2, 0), get_val(1, i as i32, 2, 1), get_val(1, i as i32, 2, 2));
+    }
+
+    for i in 0..(get_val(4, -1, 0, 0) as usize){
+      if i >= scene.all_speakers.len(){
+        let spid = &("spk".to_string()+&(get_val(4, i as i32, 4, 0) as i32).to_string());
+        let pos = Vec3::newdefined(get_val(4, i as i32, 0, 0), get_val(4, i as i32, 0, 1), get_val(4, i as i32, 0, 2));
+        scene.all_speakers.push(Speaker::new(&mut eng, &spid, pos, get_val(4, i as i32, 1, 0), get_val(4, i as i32, 2, 0), true));
+      }else{
+        if get_val(4, i as i32, 0, 0) == 1f32{
+          let spid = &("spk".to_string()+&(get_val(4, i as i32, 4, 0) as i32).to_string());
+          let pos = Vec3::newdefined(get_val(4, i as i32, 0, 0), get_val(4, i as i32, 0, 1), get_val(4, i as i32, 0, 2));
+          scene.all_speakers[i] = Speaker::new(&mut eng, &spid, pos, get_val(4, i as i32, 1, 0), get_val(4, i as i32, 2, 0), true);
+        }else{
+          scene.all_speakers[i].pos = Vec3::newdefined(get_val(4, i as i32, 0, 0), get_val(4, i as i32, 0, 1), get_val(4, i as i32, 0, 2));
+          scene.all_speakers[i].volume = get_val(4, i as i32, 2, 0);
+          scene.all_speakers[i].power = get_val(4, i as i32, 1, 0);
+        }
+      }
     }
 
     eng.start();
