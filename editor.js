@@ -621,3 +621,57 @@ function lp(){
 }
 
 lp();
+
+document.addEventListener('keydown', async function(event) {
+    if(event.key == "r" || event.key == "R"){
+        if(document.getElementById("list_div").style.display != "none"){
+            document.getElementById("list_div").style.display = "none";
+        }else{
+            document.getElementById("list_div").style.display = "initial";
+        }
+    }
+    if(event.key == "t" || event.key == "T"){
+        if(document.getElementById("file_div").style.display != "none"){
+            document.getElementById("file_div").style.display = "none";
+        }else{
+            document.getElementById("file_div").style.display = "initial";
+        }
+    }
+    if(event.key == "y" || event.key == "Y"){
+        if(document.getElementById("obj_div").style.display != "none"){
+            document.getElementById("obj_div").style.display = "none";
+        }else{
+            document.getElementById("obj_div").style.display = "initial";
+        }
+    }
+    if(event.key == "u" || event.key == "U"){
+        if(document.getElementById("assets_div").style.display != "none"){
+            document.getElementById("assets_div").style.display = "none";
+        }else{
+            document.getElementById("assets_div").style.display = "initial";
+        }
+    }
+    if(event.key == "i" || event.key == "I"){
+        if(document.getElementById("settings_div").style.display != "none"){
+            document.getElementById("settings_div").style.display = "none";
+        }else{
+            document.getElementById("settings_div").style.display = "initial";
+        }
+    }
+    if(event.key == "o" || event.key == "O"){
+        if(document.getElementById("settings_div").style.display != "none"){
+            document.getElementById("list_div").style.display = "none";
+            document.getElementById("file_div").style.display = "none";
+            document.getElementById("obj_div").style.display = "none";
+            document.getElementById("assets_div").style.display = "none";
+            document.getElementById("settings_div").style.display = "none";
+        }else{
+            document.getElementById("list_div").style.display = "initial";
+            document.getElementById("file_div").style.display = "initial";
+            document.getElementById("obj_div").style.display = "initial";
+            document.getElementById("assets_div").style.display = "initial";
+            document.getElementById("settings_div").style.display = "initial";
+        }
+    }
+    await new Promise(r => setTimeout(r, 1000));
+}, true);
