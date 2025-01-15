@@ -1,3 +1,4 @@
+
 class JMaterial{
     constructor(albedo, roughness, metalic, ao, normal, label){
         this.albedo = albedo;
@@ -18,6 +19,7 @@ class JObject{
         this.model = model;
         this.material = material;
         this.ch = true;
+        this.render = true;
     }
 }
 
@@ -98,6 +100,33 @@ var selected = -1;
 var pointer = new JPointer(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
 
 var cam = [ 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ];
+
+var edopen = false;
+
+var hideed = true;
+
+document.getElementById("open_editor").addEventListener("click", () => {
+    edopen = true;
+    document.getElementById("list_div").style.display = "initial";
+    document.getElementById("file_div").style.display = "initial";
+    document.getElementById("obj_div").style.display = "initial";
+    document.getElementById("assets_div").style.display = "initial";
+    document.getElementById("settings_div").style.display = "initial";
+    document.getElementById("start_div").style.display = "none";
+    hideed = false;
+});
+
+document.getElementById("player_mode").addEventListener("click", () => {
+    edopen = true;
+    document.getElementById("start_div").style.display = "none";
+    hideed = true;
+});
+
+document.getElementById("render").addEventListener("click", () => {
+    if(edopen){
+        document.getElementById('render').requestPointerLock();
+    }
+});
 
 var input = document.createElement('input');
 input.type = 'file';
@@ -362,56 +391,59 @@ document.getElementById("import_md").addEventListener("click", () => {
     if(elem.files.length <= 0){
         alert("no files selected!");
     }else{
-        for(var i = 0; i != elem.files.length; i+=1){
-            const spl = elem.files[i].name.split('.');
+        for(const file of elem.files){
+            const spl = file.name.split('.');
             if(spl[spl.length-1] == "txt"){
-                model_lb.push(elem.files[i].name);
+                model_lb.push(file.name);
+                let arrind = model_lb.length;
                 ch[0] = true;
                 var reader = new FileReader();
-                reader.readAsText(elem.files[i]);
-                reader.onload = function () {
+                reader.readAsText(file);
+                reader.onload = function (e) {
                     var md = document.createElement("p");
-                    md.id = "md" + model_lb.length;
+                    md.id = "md" + arrind;
                     md.textContent = reader.result;
                     md.style = "display: none;";
                     md.crossOrigin = "";
                     document.body.appendChild(md);
-                    console.log("model parsing done!");
-                    htmlcont += `<iframe src="models/` + model_lb[model_lb.length-1] + `" id="` + md.id + `"></iframe>
+                    console.log("model by name="+file.name+" by index="+arrind+" content="+e.result+" is loaded");
+                    htmlcont += `<iframe src="models/` + model_lb[arrind-1] + `" id="` + md.id + `"></iframe>
                     `;
                 }
             }
             if(spl[spl.length-1] == "png" || spl[spl.length-1] == "jpg"){
-                tex_lb.push(elem.files[i].name);
+                tex_lb.push(file.name);
+                let arrind = tex_lb.length;
                 ch[1] = true;
                 var reader = new FileReader();
-                reader.readAsDataURL(elem.files[i]);
+                reader.readAsDataURL(file);
                 reader.onload = function () {
                     var md = document.createElement("img");
-                    md.id = "tex" + tex_lb.length;
+                    md.id = "tex" + arrind;
                     md.src = reader.result;
                     md.style = "display: none;";
                     md.crossOrigin = "";
                     document.body.appendChild(md);
-                    console.log("image parsing done!");
-                    htmlcont += `<img src="textures/` + tex_lb[tex_lb.length-1] + `" id="` + md.id + `"></img>
+                    console.log("image by name="+file.name+" by index="+arrind+" src="+reader.result+" is loaded");
+                    htmlcont += `<img src="textures/` + tex_lb[arrind-1] + `" id="` + md.id + `"></img>
                     `;
                 }
             }
             if(spl[spl.length-1] == "mp3" || spl[spl.length-1] == "ogg"){
-                audio_lb.push(elem.files[i].name);
+                audio_lb.push(file.name);
+                let arrind = audio_lb.length;
                 ch[2] = true;
                 var reader = new FileReader();
-                reader.readAsDataURL(elem.files[i]);
+                reader.readAsDataURL(file);
                 reader.onload = function () {
                     var md = document.createElement("audio");
-                    md.id = "spk" + audio_lb.length;
+                    md.id = "spk" + arrind;
                     md.src = reader.result;
                     md.style = "display: none;";
                     md.crossOrigin = "";
                     document.body.appendChild(md);
-                    console.log("audio parsing done!");
-                    htmlcont += `<audio src="audio/` + audio_lb[audio_lb.length-1] + `" id="` + md.id + `"></audio>
+                    console.log("audio by name="+file.name+" by index="+arrind+" src="+reader.result+" is loaded");
+                    htmlcont += `<audio src="audio/` + audio_lb[arrind-1] + `" id="` + md.id + `"></audio>
                     `;
                 }
             }
@@ -487,8 +519,12 @@ function lp(){
     }
     document.getElementById("scale_p").innerText = "Scale";
     document.getElementById("rot").innerText = "Rotation";
+    document.getElementById("renderm").style.display = "initial";
+    document.getElementById("rendermlabel").style.display = "initial";
     if(document.getElementById("lst_mdn").value == "-4" || document.getElementById("lst_mdn").value == "-5"){
         document.getElementById("scale_p").innerText = "Color";
+        document.getElementById("renderm").style.display = "none";
+        document.getElementById("rendermlabel").style.display = "none";
     }
     document.getElementById("rotx").style.display = "initial";
     document.getElementById("rotz").style.display = "initial";
@@ -507,6 +543,8 @@ function lp(){
             document.getElementById("scalez").style.display = "none";
             document.getElementById("roty").style.width = "159px";
             document.getElementById("scaley").style.width = "159px";
+            document.getElementById("renderm").style.display = "none";
+            document.getElementById("rendermlabel").style.display = "none";
         }
     }
     if(ch[4] == true){
@@ -542,6 +580,7 @@ function lp(){
             document.getElementById("scalez").value = objs[oid].scale[2];
             document.getElementById("lst_mts").value = String(objs[oid].material);
             document.getElementById("lst_mdn").value = objs[oid].model;
+            document.getElementById("renderm").checked = objs[oid].render;
             lastsel = document.getElementById("lst").value;
         }
         objs[oid].pos[0] = document.getElementById("posx").value;
@@ -553,6 +592,7 @@ function lp(){
         objs[oid].scale[0] = document.getElementById("scalex").value;
         objs[oid].scale[1] = document.getElementById("scaley").value;
         objs[oid].scale[2] = document.getElementById("scalez").value;
+        objs[oid].render = document.getElementById("renderm").checked;
     }else if(oid[0] == "l" && oid[1] == "t"){
         oid = Number(document.getElementById("lst").value.replace("lt", ""));
         if(lastsel != document.getElementById("lst").value){
@@ -623,54 +663,56 @@ function lp(){
 lp();
 
 document.addEventListener('keydown', async function(event) {
-    if(event.key == "r" || event.key == "R"){
+    if(event.key == "r" || event.key == "R" && edopen){
         if(document.getElementById("list_div").style.display != "none"){
             document.getElementById("list_div").style.display = "none";
         }else{
             document.getElementById("list_div").style.display = "initial";
         }
     }
-    if(event.key == "t" || event.key == "T"){
+    if(event.key == "t" || event.key == "T" && edopen){
         if(document.getElementById("file_div").style.display != "none"){
             document.getElementById("file_div").style.display = "none";
         }else{
             document.getElementById("file_div").style.display = "initial";
         }
     }
-    if(event.key == "y" || event.key == "Y"){
+    if(event.key == "y" || event.key == "Y" && edopen){
         if(document.getElementById("obj_div").style.display != "none"){
             document.getElementById("obj_div").style.display = "none";
         }else{
             document.getElementById("obj_div").style.display = "initial";
         }
     }
-    if(event.key == "u" || event.key == "U"){
+    if(event.key == "u" || event.key == "U" && edopen){
         if(document.getElementById("assets_div").style.display != "none"){
             document.getElementById("assets_div").style.display = "none";
         }else{
             document.getElementById("assets_div").style.display = "initial";
         }
     }
-    if(event.key == "i" || event.key == "I"){
+    if(event.key == "i" || event.key == "I" && edopen){
         if(document.getElementById("settings_div").style.display != "none"){
             document.getElementById("settings_div").style.display = "none";
         }else{
             document.getElementById("settings_div").style.display = "initial";
         }
     }
-    if(event.key == "o" || event.key == "O"){
-        if(document.getElementById("settings_div").style.display != "none"){
+    if(event.key == "o" || event.key == "O" && edopen){
+        if(!hideed){
             document.getElementById("list_div").style.display = "none";
             document.getElementById("file_div").style.display = "none";
             document.getElementById("obj_div").style.display = "none";
             document.getElementById("assets_div").style.display = "none";
             document.getElementById("settings_div").style.display = "none";
+            hideed = !hideed
         }else{
             document.getElementById("list_div").style.display = "initial";
             document.getElementById("file_div").style.display = "initial";
             document.getElementById("obj_div").style.display = "initial";
             document.getElementById("assets_div").style.display = "initial";
             document.getElementById("settings_div").style.display = "initial";
+            hideed = !hideed
         }
     }
     await new Promise(r => setTimeout(r, 1000));

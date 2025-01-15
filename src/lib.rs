@@ -171,9 +171,11 @@ pub fn main() {
           scene.all_objects[i] = Object::new(&mut eng, md.arr, &mats[get_val(1, i as i32, 4, 0) as usize], engine::render::mesh::MUsages::ShadowAndMain, true);
         }
       }
-       scene.all_objects[i].physic_object.pos = Vec3::newdefined(get_val(1, i as i32, 0, 0), get_val(1, i as i32, 0, 1), get_val(1, i as i32, 0, 2));
-       scene.all_objects[i].physic_object.rot = Vec3::newdefined(get_val(1, i as i32, 1, 0), get_val(1, i as i32, 1, 1), get_val(1, i as i32, 1, 2));
-       scene.all_objects[i].physic_object.scale = Vec3::newdefined(get_val(1, i as i32, 2, 0), get_val(1, i as i32, 2, 1), get_val(1, i as i32, 2, 2));
+      scene.all_objects[i].physic_object.pos = Vec3::newdefined(get_val(1, i as i32, 0, 0), get_val(1, i as i32, 0, 1), get_val(1, i as i32, 0, 2));
+      scene.all_objects[i].physic_object.rot = Vec3::newdefined(get_val(1, i as i32, 1, 0), get_val(1, i as i32, 1, 1), get_val(1, i as i32, 1, 2));
+      scene.all_objects[i].physic_object.scale = Vec3::newdefined(get_val(1, i as i32, 2, 0), get_val(1, i as i32, 2, 1), get_val(1, i as i32, 2, 2));
+      scene.all_objects[i].render = get_val(1, i as i32, 6, 0) == 1.0f32;
+      scene.all_objects[i].physic_object.solid = get_val(1, i as i32, 6, 0) == 1.0f32;
     }
 
     for i in 0..(get_val(4, -1, 0, 0) as usize){

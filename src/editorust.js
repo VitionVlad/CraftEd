@@ -53,6 +53,8 @@ export function get_val(g, i, f, p){
                     let tch = objs[i].ch;
                     objs[i].ch = false;
                     return Number(tch);
+                case 6:
+                    return Number(objs[i].render);
             }
             break;
         case 2:

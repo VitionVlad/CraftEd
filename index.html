@@ -88,6 +88,81 @@
               width: 320px;
               outline: 5px solid #3b3b3b;
           }
+          #start_div {
+              background-color: #252525bb;
+              display: block;
+              position: absolute;
+              top: 50%;
+              margin-top: -240px;
+              right: 50%;
+              margin-right: -320px;
+              height: 480px;
+              width: 640px;
+              outline: 5px solid #3b3b3b;
+          }
+          #startimg {
+              display: block;
+              position: absolute;
+              top: 0%;
+              right: 50%;
+              margin-right: -128px;
+              height: 256px;
+              width: 256px;
+          }
+          #namelabel {
+              display: block;
+              position: absolute;
+              text-align: center;
+              font-size: 50px;
+              top: 160px;
+              color: white;
+              height: 50px;
+              width: 640px;
+          }
+          #import_assets {
+              display: block;
+              position: absolute;
+              background-color: #2525255d;
+              color: #FFF;
+              top: 300px;
+              font-size: 24px;
+              text-align: center;
+              width: 100%;
+              float: center;
+          }
+          #import_sdf {
+              display: block;
+              position: absolute;
+              background-color: #2525255d;
+              color: #FFF;
+              top: 340px;
+              font-size: 24px;
+              text-align: center;
+              width: 100%;
+              float: center;
+          }
+          #open_editor {
+              display: block;
+              position: absolute;
+              background-color: #2525255d;
+              color: #FFF;
+              top: 380px;
+              font-size: 24px;
+              text-align: center;
+              width: 100%;
+              float: center;
+          }
+          #player_mode {
+              display: block;
+              position: absolute;
+              background-color: #2525255d;
+              color: #FFF;
+              top: 420px;
+              font-size: 24px;
+              text-align: center;
+              width: 100%;
+              float: center;
+          }
           .t1 {
               color: #FFF;
               font-size: 18px;
@@ -147,11 +222,16 @@
           ::-ms-input-placeholder {
             color: white;
           }
+          *{
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+          }
       </style>
   </head>
   <body style="background-color: #080808;" id="bd">
-      <canvas id="render" onclick="document.getElementById('render').requestPointerLock()"></canvas>
-      <div id="list_div">
+      <canvas id="render"></canvas>
+      <div id="list_div" style="display: none;">
           <p id="list_p" class="t1"> Object list </p>
           <select id="lst" multiple>
               <option value="pit">Pointer</option>
@@ -163,12 +243,12 @@
               </optgroup>
           </select>
       </div>
-      <div id="file_div">
+      <div id="file_div" style="display: none;">
           <p id="file_p" class="t1"> File </p>
           <button class="b1" id="save">Export</button>
           <button class="b1" id="load">Import SDF</button>
       </div>
-      <div id="obj_div">
+      <div id="obj_div" style="display: none;">
           <p id="obj_p" class="t1"> Object </p>
           <input type="text" style="background-color: #474747; color: white; font-size: 14px; width: 100%;" id="obj_label" name="objlabel" required minlength="1" placeholder="Object label"/>
           <p id="list_md" class="t2"> Model </p>
@@ -202,13 +282,15 @@
           <input type="number" class="inp1" id="scaley" value="1">
           <input type="number" class="inp1" id="scalex" value="1">
           <p id="scale_p" class="t2"> Scale </p>
+          <input type="checkbox" id="renderm" name="renderml" checked/>
+          <label style="color: white; font-size: 16px;" for="renderml" id="rendermlabel">Render mesh</label>
           <button class="b1" id="create">Create</button>
           <button class="b1" id="apply">Apply</button>
       </div>
-      <div id="assets_div">
+      <div id="assets_div" style="display: none;">
           <p id="assets_p" class="t1"> Assets </p>
           <label style="color: white; font-size: 18px;" for="md_sel">Choose a asset to import:</label>
-          <input style="color: white; font-size: 14px;" type="file" id="md_sel" name="md_sel" accept=".txt,.png,.jpg,.mp3,.ogg"/>
+          <input style="color: white; font-size: 14px;" type="file" id="md_sel" name="md_sel" accept=".txt,.png,.jpg,.mp3,.ogg" multiple/>
           <button class="b1" id="import_md">Import asset</button>
           <select id="lst_img" class="lstl">
               <optgroup id="lst_img_ass" label="Textures">
@@ -223,7 +305,7 @@
           <button class="b2" id="norm_btn">Normal</button>
           <button class="b2" id="crt">Create</button>
       </div>
-      <div id="settings_div">
+      <div id="settings_div" style="display: none;">
           <p id="settings_p" class="t1"> Settings </p>
           <input style="width: 200px; width: 200px;" type="range" id="volume" name="volume" min="0" max="10" value="5"/>
           <label style="color: white; font-size: 16px; display: inline-block; width: 110px;" for="volume">Volume</label>
@@ -239,6 +321,14 @@
           <label style="color: white; font-size: 16px;" for="noclip">Noclip</label>
           <input type="checkbox" id="uppch" name="upp" />
           <label style="color: white; font-size: 16px;" for="upp">Use player position (for light sources only)</label>
+      </div>
+      <div id="start_div">
+        <img src="assets/logo.png" id="startimg"></img>
+        <p id="namelabel"> CraftEd </p>
+        <button id="import_assets">Import assets</button>
+        <button id="import_sdf">Import SDF</button>
+        <button id="open_editor">Open editor</button>
+        <button id="player_mode">Player mode</button>
       </div>
       <script src="editor.js"></script>
       <script type="module">
