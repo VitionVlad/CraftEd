@@ -397,16 +397,16 @@ document.getElementById("import_md").addEventListener("click", () => {
                 model_lb.push(file.name);
                 let arrind = model_lb.length;
                 ch[0] = true;
-                var reader = new FileReader();
+                let reader = new FileReader();
                 reader.readAsText(file);
-                reader.onload = function (e) {
+                reader.onload = function () {
                     var md = document.createElement("p");
                     md.id = "md" + arrind;
                     md.textContent = reader.result;
                     md.style = "display: none;";
                     md.crossOrigin = "";
                     document.body.appendChild(md);
-                    console.log("model by name="+file.name+" by index="+arrind+" content="+e.result+" is loaded");
+                    console.log("model by name="+file.name+" by index="+arrind+" content="+reader.result+" is loaded");
                     htmlcont += `<iframe src="models/` + model_lb[arrind-1] + `" id="` + md.id + `"></iframe>
                     `;
                 }
@@ -415,7 +415,7 @@ document.getElementById("import_md").addEventListener("click", () => {
                 tex_lb.push(file.name);
                 let arrind = tex_lb.length;
                 ch[1] = true;
-                var reader = new FileReader();
+                let reader = new FileReader();
                 reader.readAsDataURL(file);
                 reader.onload = function () {
                     var md = document.createElement("img");
@@ -433,7 +433,7 @@ document.getElementById("import_md").addEventListener("click", () => {
                 audio_lb.push(file.name);
                 let arrind = audio_lb.length;
                 ch[2] = true;
-                var reader = new FileReader();
+                let reader = new FileReader();
                 reader.readAsDataURL(file);
                 reader.onload = function () {
                     var md = document.createElement("audio");
