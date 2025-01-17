@@ -242,6 +242,10 @@ document.getElementById("load").addEventListener("click", () => {
     input.click();
 });
 
+document.getElementById("import_sdf").addEventListener("click", () => {
+    input.click();
+});
+
 document.getElementById("alb_btn").addEventListener("click", () => {
     mif[0] = document.getElementById("lst_img").value;
 });
@@ -717,3 +721,78 @@ document.addEventListener('keydown', async function(event) {
     }
     await new Promise(r => setTimeout(r, 1000));
 }, true);
+
+var assetimportlc = document.createElement('input');
+assetimportlc.type = 'file';
+assetimportlc.accept = ".txt,.png,.jpg,.mp3,.ogg";
+assetimportlc.style.display = "none";
+assetimportlc.multiple = "true";
+
+assetimportlc.onchange = e => { 
+    var files = e.target.files;
+    if(files.length <= 0){
+        alert("no files selected!");
+    }else{
+        for(const file of files){
+            const spl = file.name.split('.');
+            if(spl[spl.length-1] == "txt"){
+                model_lb.push(file.name);
+                let arrind = model_lb.length;
+                ch[0] = true;
+                let reader = new FileReader();
+                reader.readAsText(file);
+                reader.onload = function () {
+                    var md = document.createElement("p");
+                    md.id = "md" + arrind;
+                    md.textContent = reader.result;
+                    md.style = "display: none;";
+                    md.crossOrigin = "";
+                    document.body.appendChild(md);
+                    console.log("model by name="+file.name+" by index="+arrind+" content="+reader.result+" is loaded");
+                    htmlcont += `<iframe src="models/` + model_lb[arrind-1] + `" id="` + md.id + `"></iframe>
+                    `;
+                }
+            }
+            if(spl[spl.length-1] == "png" || spl[spl.length-1] == "jpg"){
+                tex_lb.push(file.name);
+                let arrind = tex_lb.length;
+                ch[1] = true;
+                let reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = function () {
+                    var md = document.createElement("img");
+                    md.id = "tex" + arrind;
+                    md.src = reader.result;
+                    md.style = "display: none;";
+                    md.crossOrigin = "";
+                    document.body.appendChild(md);
+                    console.log("image by name="+file.name+" by index="+arrind+" src="+reader.result+" is loaded");
+                    htmlcont += `<img src="textures/` + tex_lb[arrind-1] + `" id="` + md.id + `"></img>
+                    `;
+                }
+            }
+            if(spl[spl.length-1] == "mp3" || spl[spl.length-1] == "ogg"){
+                audio_lb.push(file.name);
+                let arrind = audio_lb.length;
+                ch[2] = true;
+                let reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = function () {
+                    var md = document.createElement("audio");
+                    md.id = "spk" + arrind;
+                    md.src = reader.result;
+                    md.style = "display: none;";
+                    md.crossOrigin = "";
+                    document.body.appendChild(md);
+                    console.log("audio by name="+file.name+" by index="+arrind+" src="+reader.result+" is loaded");
+                    htmlcont += `<audio src="audio/` + audio_lb[arrind-1] + `" id="` + md.id + `"></audio>
+                    `;
+                }
+            }
+        }
+    }
+}
+
+document.getElementById("import_assets").addEventListener("click", () => {
+    assetimportlc.click();
+});
