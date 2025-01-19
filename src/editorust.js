@@ -22,6 +22,12 @@ export function get_elem_ch(id){
     return document.getElementById(id).checked;
 }
 
+export function startlvl(){
+    let t = sap;
+    sap = false;
+    return t;
+}
+
 export function get_val(g, i, f, p){
     switch(g){
         case 0:
@@ -55,6 +61,8 @@ export function get_val(g, i, f, p){
                     return Number(tch);
                 case 6:
                     return Number(objs[i].render);
+                case 7:
+                    return Number(objs[i].deleted);
             }
             break;
         case 2:
@@ -70,6 +78,8 @@ export function get_val(g, i, f, p){
                     return lts[i].color[p];
                 case 3:
                     return Number(lts[i].ch);
+                case 4:
+                    return Number(lts[i].deleted);
             }
             break;
         case 4:
@@ -87,6 +97,8 @@ export function get_val(g, i, f, p){
                     return Number(spks[i].audio.replace("spk", ""));
                 case 5:
                     return Number(spks[i].ch);
+                case 6:
+                    return Number(spks[i].deleted);
             }
             break;
         case 5:

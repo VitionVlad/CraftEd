@@ -30,6 +30,7 @@ extern {
   pub fn get_mouse_lock() -> bool;
   pub fn get_elem_ch(id: &str) -> bool;
   pub fn get_val(g: i32, i: i32, f: i32, p: i32) -> f32;
+  pub fn startlvl() -> bool;
   pub fn set_cam_pos(posx: f32, posy: f32, posz: f32, rotx: f32, roty: f32, rotz: f32);
 }
 
@@ -127,6 +128,10 @@ pub fn main() {
       eng.lights[i].pos = Vec3::newdefined(get_val(2, i as i32, 0, 0), get_val(2, i as i32, 0, 1), get_val(2, i as i32, 0, 2));
       eng.lights[i].rot = Vec3::newdefined(get_val(2, i as i32, 1, 0), get_val(2, i as i32, 1, 1), get_val(2, i as i32, 1, 2));
       eng.lights[i].color = Vec3::newdefined(get_val(2, i as i32, 2, 0), get_val(2, i as i32, 2, 1), get_val(2, i as i32, 2, 2));
+      if get_val(2, i as i32, 4, 0) == 1.0f32{
+        eng.lights[i].shadow = false;
+        eng.lights[i].color = Vec3::new();
+      }
     }
 
     for i in 0..(get_val(5, -1, 0, 0) as usize){
@@ -194,6 +199,16 @@ pub fn main() {
           scene.all_speakers[i].power = get_val(4, i as i32, 1, 0);
         }
       }
+      if get_val(4, i as i32, 6, 0) == 1.0f32{
+        scene.all_speakers[i].power = 0.0f32;
+        scene.all_speakers[i].volume = 0.0f32;
+      }
+    }
+
+    if startlvl(){
+      eng.cameras[0].physic_object.pos.x = 0.0f32;
+      eng.cameras[0].physic_object.pos.y = 5.5f32;
+      eng.cameras[0].physic_object.pos.z = 0.0f32;
     }
 
     eng.start();

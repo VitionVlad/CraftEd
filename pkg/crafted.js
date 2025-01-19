@@ -1,6 +1,6 @@
 import { get_elem_ch } from './snippets/crafted-974ab77c7d42ec87/src/editorust.js';
 import { Jsaudioctx, Jsaudiosource } from './snippets/crafted-974ab77c7d42ec87/src/engine/audio/audio.js';
-import { Jskeyboard, Jsgamepad, Jsmouse, Jstouch } from './snippets/crafted-974ab77c7d42ec87/src/engine/input/input.js';
+import { Jskeyboard, Jsmouse, Jsgamepad, Jstouch } from './snippets/crafted-974ab77c7d42ec87/src/engine/input/input.js';
 import { Gfxrender, Gfxmesh, Jsloop, snlll } from './snippets/crafted-974ab77c7d42ec87/src/engine/render/gfx.js';
 import { Jsrelod } from './snippets/crafted-974ab77c7d42ec87/src/engine/resourceloader/resloader.js';
 import * as __wbg_star0 from './snippets/crafted-974ab77c7d42ec87/src/editorust.js';
@@ -281,7 +281,7 @@ function __wbg_get_imports() {
         const ret = wasm.memory;
         return addHeapObject(ret);
     };
-    imports.wbg.__wbindgen_closure_wrapper53 = function(arg0, arg1, arg2) {
+    imports.wbg.__wbindgen_closure_wrapper54 = function(arg0, arg1, arg2) {
         const ret = makeMutClosure(arg0, arg1, 3, __wbg_adapter_8);
         return addHeapObject(ret);
     };

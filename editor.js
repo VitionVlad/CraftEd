@@ -20,6 +20,7 @@ class JObject{
         this.material = material;
         this.ch = true;
         this.render = true;
+        this.deleted = false;
     }
 }
 
@@ -30,6 +31,7 @@ class JLight{
         this.color = [r, g, b];
         this.label = label;
         this.ch = true;
+        this.deleted = false;
     }
 }
 
@@ -41,6 +43,7 @@ class JAudio{
         this.label = label;
         this.audio = audio;
         this.ch = true;
+        this.deleted = false;
     }
 }
 
@@ -105,6 +108,8 @@ var edopen = false;
 
 var hideed = true;
 
+var sap = false;
+
 document.getElementById("open_editor").addEventListener("click", () => {
     edopen = true;
     document.getElementById("list_div").style.display = "initial";
@@ -119,7 +124,10 @@ document.getElementById("open_editor").addEventListener("click", () => {
 document.getElementById("player_mode").addEventListener("click", () => {
     edopen = true;
     document.getElementById("start_div").style.display = "none";
+    document.getElementById("ppsch").checked = true;
+    document.getElementById("noclipch").checked = false;
     hideed = true;
+    sap = true;
 });
 
 document.getElementById("render").addEventListener("click", () => {
@@ -267,12 +275,23 @@ document.getElementById("norm_btn").addEventListener("click", () => {
 });
 
 document.getElementById("crt").addEventListener("click", () => {
-    var label = document.getElementById("mt_label").value;
-    if(label == ""){
-        label = "mat"+mats.length;
+    var e = 0;
+    for(var i = 0; i != 5; i+=1){
+        var element =  document.getElementById(mif[i]);
+        if (typeof(element) != 'undefined' && element != null){
+          e+=1;
+        }
     }
-    mats.push(new JMaterial(mif[0], mif[1], mif[2], mif[3], mif[4], label));
-    ch[3] = true;
+    if(e == 5){
+        var label = document.getElementById("mt_label").value;
+        if(label == ""){
+            label = "mat"+mats.length;
+        }
+        mats.push(new JMaterial(mif[0], mif[1], mif[2], mif[3], mif[4], label));
+        ch[3] = true;
+    }else{
+        alert("Not all textures exists or are set");
+    }
 });
 
 document.getElementById("create").addEventListener("click", () => {
@@ -389,6 +408,25 @@ document.getElementById("apply").addEventListener("click", () => {
     ch[4] = true;
 });
 
+document.getElementById("delete").addEventListener("click", () => {
+    var nam = document.getElementById("lst").value;
+    var namsep = nam;
+    namsep.split("");
+
+    if(namsep[0] == "o" && namsep[1] == "b" && namsep[2] == "j"){
+        nam = Number(nam.replace("obj", ""));
+        objs[nam].deleted = true;
+        objs[nam].render = false;
+    }else if(namsep[0] == "a" && namsep[1] == "u" && namsep[2] == "d"){
+        nam = Number(nam.replace("aud", ""));
+        spks[nam].deleted = true;
+    }else if(namsep[0] == "l" && namsep[1] == "t"){
+        nam = Number(nam.replace("lt", ""));
+        lts[nam].deleted = true;
+    }
+
+    ch[4] = true;
+});
 
 document.getElementById("import_md").addEventListener("click", () => {
     const elem = document.getElementById("md_sel");
@@ -461,13 +499,21 @@ document.getElementById("save").addEventListener("click", () => {
         var posrotscale = objs[i].pos[0] + ` ` + objs[i].pos[1] + ` ` + objs[i].pos[2] + ` ` + objs[i].rot[0] + ` ` + objs[i].rot[1] + ` ` + objs[i].rot[2] + ` ` + objs[i].scale[0] + ` ` + objs[i].scale[1] + ` ` + objs[i].scale[2] + `
         `;
         if(objs[i].model == "-1"){
-            sdf += `cs 1 ` + posrotscale;
+            if(!objs[i].deleted){
+                sdf += `cs 1 ` + posrotscale;
+            }
         }else if(objs[i].model == "-2"){
-            sdf += `cu 1 ` + posrotscale;
+            if(!objs[i].deleted){
+                sdf += `cu 1 ` + posrotscale;
+            }
         }else if(objs[i].model == "-3"){
-            sdf += `pl 1 ` + posrotscale;
+            if(!objs[i].deleted){
+                sdf += `pl 1 ` + posrotscale;
+            }
         }else{
-            sdf += `md 1 ` + objs[i].model.replace("md", "") + ` ` + posrotscale;
+            if(!objs[i].deleted){
+                sdf += `md 1 ` + objs[i].model.replace("md", "") + ` ` + posrotscale;
+            }
         }
         sdf += `mat 1 2 0 1 5 ` + (mats[objs[i].material].albedo.replace("tex", "")) + ` ` + (mats[objs[i].material].roughness.replace("tex", "")) + ` ` + (mats[objs[i].material].metalic.replace("tex", "")) + ` ` + (mats[objs[i].material].ao.replace("tex", "")) + ` ` + (mats[objs[i].material].normal.replace("tex", "")) + `
         `;
@@ -475,12 +521,16 @@ document.getElementById("save").addEventListener("click", () => {
     for(var i = 0; i != lts.length; i+=1){
         var posrotscale = lts[i].pos[0] + ` ` + lts[i].pos[1] + ` ` + lts[i].pos[2] + ` ` + lts[i].rot[0] + ` ` + lts[i].rot[1] + ` ` + lts[i].rot[2] + ` ` + lts[i].color[0] + ` ` + lts[i].color[1] + ` ` + lts[i].color[2] + `
         `;
-        sdf += `lt 0 ` + posrotscale;
+        if(!lts[i].deleted){
+            sdf += `lt 0 ` + posrotscale;
+        }
     }
     for(var i = 0; i != spks.length; i+=1){
         var posrotscale = spks[i].power + ` ` + spks[i].volume + ` 1 ` + spks[i].pos[0] + ` ` + spks[i].pos[1] + ` ` + spks[i].pos[2] + `
         `;
-        sdf += `sp ` + Number(spks[i].audio.replace("spk", "")) + ` ` + posrotscale;
+        if(!spks[i].deleted){
+            sdf += `sp ` + Number(spks[i].audio.replace("spk", "")) + ` ` + posrotscale;
+        }
     }
     download("scene.html", htmlcont + `<iframe id="scene" src="scene.sdf.txt"></iframe></body>`);
     download("scene.sdf.txt", sdf);
@@ -555,17 +605,23 @@ function lp(){
         var lst = document.getElementById("lst_obj");
         lst.innerHTML = "";
         for(var i = 0; i != objs.length; i+=1){
-            lst.innerHTML += '<option value="obj' + i + '">' + objs[i].label + '</option>';
+            if (!objs[i].deleted){
+                lst.innerHTML += '<option value="obj' + i + '">' + objs[i].label + '</option>';
+            }
         }
         lst = document.getElementById("lst_ls");
         lst.innerHTML = "";
         for(var i = 0; i != lts.length; i+=1){
-            lst.innerHTML += '<option value="lt' + i + '">' + lts[i].label + '</option>';
+            if (!lts[i].deleted){
+                lst.innerHTML += '<option value="lt' + i + '">' + lts[i].label + '</option>';
+            }
         }
         lst = document.getElementById("lst_spk");
         lst.innerHTML = "";
         for(var i = 0; i != spks.length; i+=1){
-            lst.innerHTML += '<option value="aud' + i + '">' + spks[i].label + '</option>';
+            if (!spks[i].deleted){
+                lst.innerHTML += '<option value="aud' + i + '">' + spks[i].label + '</option>';
+            }
         }
         ch[4] = false;
     }
