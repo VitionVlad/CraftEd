@@ -110,6 +110,11 @@ var hideed = true;
 
 var sap = false;
 
+document.getElementById("volume").value = localStorage.getItem("vl");
+document.getElementById("rscale").value = localStorage.getItem("rs");
+document.getElementById("sres").value = localStorage.getItem("sq");
+document.getElementById("fovs").value = localStorage.getItem("fov");
+
 document.getElementById("open_editor").addEventListener("click", () => {
     edopen = true;
     document.getElementById("list_div").style.display = "initial";
@@ -539,6 +544,10 @@ document.getElementById("save").addEventListener("click", () => {
 var lastsel = "";
 
 function lp(){
+    localStorage.setItem("vl", document.getElementById("volume").value);
+    localStorage.setItem("rs", document.getElementById("rscale").value);
+    localStorage.setItem("sq", document.getElementById("sres").value);
+    localStorage.setItem("fov", document.getElementById("fovs").value);
     if(ch[0] == true){
         var lst = document.getElementById("lst_md_ass");
         lst.innerHTML = "";
