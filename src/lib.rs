@@ -41,6 +41,7 @@ pub fn main() {
   eng.lights[0] = Light::new(engine::light::LightType::Spot);
 
   let mut matgen = MaterialGenerator::new(vec![]);
+  matgen.culling_mode_shadow = "front".to_string();
   matgen.gen_vertex();
   matgen.gen_frag_beg();
   matgen.fragment_shader += "

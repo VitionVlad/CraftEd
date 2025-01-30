@@ -14,6 +14,7 @@ pub struct Material{
     pub culling_mode_shadow: String,
     pub repeat_mode: String,
     pub ubo_size: i32,
+    pub uniforms: Vec<Uniformstruct>,
 }
 
 #[allow(dead_code)]
@@ -27,6 +28,7 @@ pub struct MaterialGenerator{
     pub repeat_mode: String,
     shaderbeg: String,
     pub ubo_size: i32,
+    pub uniforms: Vec<Uniformstruct>,
 }
 
 impl MaterialGenerator{
@@ -63,10 +65,10 @@ impl MaterialGenerator{
         @vertex
         fn vertexMain(@location(0) pos: vec3f, @location(1) uv: vec2f, @location(2) n: vec3f, @location(3) t: vec3f, @location(4) bt: vec3f) -> OUT {
           var out: OUT;
-          out.position = ubo.mvp[ubo.eng.a] * ubo.model * vec4f(pos, 1.0);
+          out.position = ubo.mvp[ubo.eng.a] * ubo.trans * ubo.rot * ubo.scale * vec4f(pos, 1.0);
           out.uv = vec2f(uv.x, 1.0-uv.y);
-          out.vp = ubo.model * vec4f(pos, 1.0);
-          out.norm = n;
+          out.vp = ubo.trans * ubo.rot * ubo.scale * vec4f(pos, 1.0);
+          out.norm = vec4f(ubo.rot * vec4f(n, 1.0)).xyz;
           out.tangent = t;
           out.bitangent = bt;
           return out;
@@ -126,6 +128,7 @@ impl MaterialGenerator{
             repeat_mode: "repeat".to_string(),
             shaderbeg: shaderbeg,
             ubo_size: plus,
+            uniforms: uniforms,
         }
     }
     #[allow(dead_code)]
@@ -165,10 +168,10 @@ impl MaterialGenerator{
       @vertex
       fn vertexMain(@location(0) pos: vec3f, @location(1) uv: vec2f, @location(2) n: vec3f, @location(3) t: vec3f, @location(4) bt: vec3f) -> OUT {
         var out: OUT;
-        out.position = ubo.mvp[i32(ubo.eng.a)] * ubo.model * vec4f(pos, 1.0);
+        out.position = ubo.mvp[i32(ubo.eng.a)] * ubo.trans * ubo.rot * ubo.scale * vec4f(pos, 1.0);
         out.uv = vec2f(uv.x, 1.0-uv.y);
-        out.vp = ubo.model * vec4f(pos, 1.0);
-        out.norm = n;
+        out.vp = ubo.trans * ubo.rot * ubo.scale * vec4f(pos, 1.0);
+        out.norm = vec4f(ubo.rot * vec4f(n, 1.0)).xyz;
         out.tangent = t;
         out.bitangent = bt;
         out.rp = vec4f(pos, 1.0);
@@ -381,6 +384,7 @@ impl MaterialGenerator{
             culling_mode_shadow: self.culling_mode_shadow.to_string(),
             repeat_mode: self.repeat_mode.to_string(),
             ubo_size: self.ubo_size,
+            uniforms: self.uniforms.clone(),
         }
     }
 }

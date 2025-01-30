@@ -88,6 +88,25 @@ var audio_lb = [];
 
 var mats = [];
 
+mats.push(
+    new JMaterial("tex1", "tex2", "tex3", "tex4", "tex5", "bricks"),
+    new JMaterial("tex6", "tex7", "tex8", "tex9", "tex10", "concrete"),
+    new JMaterial("tex11", "tex12", "tex13", "tex14", "tex15", "fabric_blue"),
+    new JMaterial("tex16", "tex17", "tex18", "tex19", "tex20", "fabric_gray"),
+    new JMaterial("tex21", "tex22", "tex23", "tex24", "tex25", "fabric_red"),
+    new JMaterial("tex26", "tex27", "tex28", "tex29", "tex30", "fabric_rednwhite"),
+    new JMaterial("tex31", "tex32", "tex33", "tex34", "tex35", "gray_plaster"),
+    new JMaterial("tex36", "tex37", "tex38", "tex39", "tex40", "metal"),
+    new JMaterial("tex41", "tex42", "tex43", "tex44", "tex45", "paving"),
+    new JMaterial("tex46", "tex47", "tex48", "tex49", "tex50", "red_plaster"),
+    new JMaterial("tex51", "tex52", "tex53", "tex54", "tex55", "roof"),
+    new JMaterial("tex56", "tex57", "tex58", "tex59", "tex60", "tiles"),
+    new JMaterial("tex61", "tex62", "tex63", "tex64", "tex65", "wood"),
+    new JMaterial("tex66", "tex67", "tex68", "tex69", "tex70", "wood_dark"),
+    new JMaterial("tex71", "tex72", "tex73", "tex74", "tex75", "wood_floor"),
+    new JMaterial("tex76", "tex77", "tex78", "tex79", "tex80", "yellow_plaster"),
+);
+
 var ch = [true, true, true, true, true];
 
 var mif = ["", "", "", "", ""];
@@ -151,7 +170,7 @@ input.onchange = e => {
     var reader = new FileReader();
     reader.readAsText(file);
     reader.onload = function () {
-        var objn = 0;
+        var objn = 16;
         var audn = 0;
         var ltn = 0;
         var matnm = 0;
@@ -242,8 +261,8 @@ input.onchange = e => {
                 console.log("SDFLoader: found speaker at index ="+ i);
             }
             if(st[i] == "mat"){ 
-                console.log("SDFLoader: found material at index ="+ i);
                 mats.push(new JMaterial("tex"+st[i+6], "tex"+st[i+7], "tex"+st[i+8], "tex"+st[i+9], "tex"+st[i+10], "mat"+matnm));
+                console.log("SDFLoader: found material at index =" + i + " textures: " + st[i+6] + " " + st[i+7] + " " + st[i+8] + " " + st[i+9] + " " + st[i+10]);
                 matnm += 1;
             }
         }
@@ -364,7 +383,7 @@ document.getElementById("apply").addEventListener("click", () => {
     if(namsep[0] == "o" && namsep[1] == "b" && namsep[2] == "j"){
         nam = Number(nam.replace("obj", ""));
         var tc = document.getElementById("lst_mdn").value.split("");
-        if((tc[0] == "m" && tc[1] == "d") || tc[1] == "1" || tc[1] == "2" || tc[1] == "3"){
+        if((tc[0] == "m" && tc[1] == "d") || !((tc[1] == "4" && tc[1] == "5") && tc.length == 2)){
             if(label == ""){
                 label = objs[nam].label;
             }
@@ -502,7 +521,7 @@ document.getElementById("save").addEventListener("click", () => {
     var sdf = ``;
     for(var i = 0; i != objs.length; i+=1){
         var posrotscale = objs[i].pos[0] + ` ` + objs[i].pos[1] + ` ` + objs[i].pos[2] + ` ` + objs[i].rot[0] + ` ` + objs[i].rot[1] + ` ` + objs[i].rot[2] + ` ` + objs[i].scale[0] + ` ` + objs[i].scale[1] + ` ` + objs[i].scale[2] + `
-        `;
+`;
         if(objs[i].model == "-1"){
             if(!objs[i].deleted){
                 sdf += `cs 1 ` + posrotscale;
@@ -521,18 +540,18 @@ document.getElementById("save").addEventListener("click", () => {
             }
         }
         sdf += `mat 1 2 0 1 5 ` + (mats[objs[i].material].albedo.replace("tex", "")) + ` ` + (mats[objs[i].material].roughness.replace("tex", "")) + ` ` + (mats[objs[i].material].metalic.replace("tex", "")) + ` ` + (mats[objs[i].material].ao.replace("tex", "")) + ` ` + (mats[objs[i].material].normal.replace("tex", "")) + `
-        `;
+`;
     }
     for(var i = 0; i != lts.length; i+=1){
         var posrotscale = lts[i].pos[0] + ` ` + lts[i].pos[1] + ` ` + lts[i].pos[2] + ` ` + lts[i].rot[0] + ` ` + lts[i].rot[1] + ` ` + lts[i].rot[2] + ` ` + lts[i].color[0] + ` ` + lts[i].color[1] + ` ` + lts[i].color[2] + `
-        `;
+`;
         if(!lts[i].deleted){
             sdf += `lt 0 ` + posrotscale;
         }
     }
     for(var i = 0; i != spks.length; i+=1){
         var posrotscale = spks[i].power + ` ` + spks[i].volume + ` 1 ` + spks[i].pos[0] + ` ` + spks[i].pos[1] + ` ` + spks[i].pos[2] + `
-        `;
+`;
         if(!spks[i].deleted){
             sdf += `sp ` + Number(spks[i].audio.replace("spk", "")) + ` ` + posrotscale;
         }
