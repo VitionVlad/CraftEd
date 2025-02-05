@@ -1,3 +1,4 @@
+
 use engine::cube::{CUBE, CUBEUV};
 use engine::engine::Engine;
 use engine::light::Light;
@@ -136,15 +137,17 @@ pub fn main() {
     }
 
     for i in 0..(get_val(5, -1, 0, 0) as usize){
-      let mut tid = "".to_string();
-      for b in 0..4{
-        tid+=&("tex".to_string()+&(get_val(5, i as i32, b, 0) as i32).to_string()+";");
-      }
-      tid+=&("tex".to_string()+&(get_val(5, i as i32, 4, 0) as i32).to_string());
-      if i >= mats.len(){
-        mats.push(matgen.generate_material(tid, "".to_string()));
-      }else{
-        mats[i] = matgen.generate_material(tid, "".to_string());
+      if get_val(5, i as i32, 5, 0) == 1.0f32 {
+        let mut tid = "".to_string();
+        for b in 0..4{
+          tid+=&("tex".to_string()+&(get_val(5, i as i32, b, 0) as i32).to_string()+";");
+        }
+        tid+=&("tex".to_string()+&(get_val(5, i as i32, 4, 0) as i32).to_string());
+        if i >= mats.len(){
+          mats.push(matgen.generate_material(tid, "".to_string()));
+        }else{
+          mats[i] = matgen.generate_material(tid, "".to_string());
+        }
       }
     }
 

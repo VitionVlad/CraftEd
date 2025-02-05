@@ -1,12 +1,12 @@
-
 class JMaterial{
-    constructor(albedo, roughness, metalic, ao, normal, label){
+    constructor(albedo, roughness, metalic, ao, normal, label, lnk){
         this.albedo = albedo;
         this.roughness = roughness;
         this.metalic = metalic;
         this.ao = ao;
         this.normal = normal;
         this.label = label;
+        this.lnk = lnk;
     }
 }
 
@@ -89,22 +89,22 @@ var audio_lb = [];
 var mats = [];
 
 mats.push(
-    new JMaterial("tex1", "tex2", "tex3", "tex4", "tex5", "bricks"),
-    new JMaterial("tex6", "tex7", "tex8", "tex9", "tex10", "concrete"),
-    new JMaterial("tex11", "tex12", "tex13", "tex14", "tex15", "fabric_blue"),
-    new JMaterial("tex16", "tex17", "tex18", "tex19", "tex20", "fabric_gray"),
-    new JMaterial("tex21", "tex22", "tex23", "tex24", "tex25", "fabric_red"),
-    new JMaterial("tex26", "tex27", "tex28", "tex29", "tex30", "fabric_rednwhite"),
-    new JMaterial("tex31", "tex32", "tex33", "tex34", "tex35", "gray_plaster"),
-    new JMaterial("tex36", "tex37", "tex38", "tex39", "tex40", "metal"),
-    new JMaterial("tex41", "tex42", "tex43", "tex44", "tex45", "paving"),
-    new JMaterial("tex46", "tex47", "tex48", "tex49", "tex50", "red_plaster"),
-    new JMaterial("tex51", "tex52", "tex53", "tex54", "tex55", "roof"),
-    new JMaterial("tex56", "tex57", "tex58", "tex59", "tex60", "tiles"),
-    new JMaterial("tex61", "tex62", "tex63", "tex64", "tex65", "wood"),
-    new JMaterial("tex66", "tex67", "tex68", "tex69", "tex70", "wood_dark"),
-    new JMaterial("tex71", "tex72", "tex73", "tex74", "tex75", "wood_floor"),
-    new JMaterial("tex76", "tex77", "tex78", "tex79", "tex80", "yellow_plaster"),
+    new JMaterial("tex1", "tex2", "tex3", "tex4", "tex5", "bricks", -1),
+    new JMaterial("tex6", "tex7", "tex8", "tex9", "tex10", "concrete", -1),
+    new JMaterial("tex11", "tex12", "tex13", "tex14", "tex15", "fabric_blue", -1),
+    new JMaterial("tex16", "tex17", "tex18", "tex19", "tex20", "fabric_gray", -1),
+    new JMaterial("tex21", "tex22", "tex23", "tex24", "tex25", "fabric_red", -1),
+    new JMaterial("tex26", "tex27", "tex28", "tex29", "tex30", "fabric_rednwhite", -1),
+    new JMaterial("tex31", "tex32", "tex33", "tex34", "tex35", "gray_plaster", -1),
+    new JMaterial("tex36", "tex37", "tex38", "tex39", "tex40", "metal", -1),
+    new JMaterial("tex41", "tex42", "tex43", "tex44", "tex45", "paving", -1),
+    new JMaterial("tex46", "tex47", "tex48", "tex49", "tex50", "red_plaster", -1),
+    new JMaterial("tex51", "tex52", "tex53", "tex54", "tex55", "roof", -1),
+    new JMaterial("tex56", "tex57", "tex58", "tex59", "tex60", "tiles", -1),
+    new JMaterial("tex61", "tex62", "tex63", "tex64", "tex65", "wood", -1),
+    new JMaterial("tex66", "tex67", "tex68", "tex69", "tex70", "wood_dark", -1),
+    new JMaterial("tex71", "tex72", "tex73", "tex74", "tex75", "wood_floor", -1),
+    new JMaterial("tex76", "tex77", "tex78", "tex79", "tex80", "yellow_plaster", -1),
 );
 
 var ch = [true, true, true, true, true];
@@ -178,63 +178,6 @@ input.onchange = e => {
         var st = modeltext.split('\n').join(' ').split(' ');
         console.log("SDFLoader: SepSceneSize="+ st.length);
         for(var i = 0; i != st.length; i+=1){
-            if(st[i] == "md"){ 
-                console.log("SDFLoader: found model mesh at index ="+ i);
-                let mid = st[i+2];
-                let xp = parseFloat(st[i+3]);
-                let yp = parseFloat(st[i+4]);
-                let zp = parseFloat(st[i+5]);
-                let xr = parseFloat(st[i+6]);
-                let yr = parseFloat(st[i+7]);
-                let zr = parseFloat(st[i+8]);
-                let xs = parseFloat(st[i+9]);
-                let ys = parseFloat(st[i+10]);
-                let zs = parseFloat(st[i+11]);
-                objs.push(new JObject(xp, yp, zp, xr, yr, zr, xs, ys, zs, "Object" + objn, "md"+mid, objn));
-                objn += 1;
-            }
-            if(st[i] == "cs"){ 
-                console.log("SDFLoader: found cube mesh at index ="+ i);
-                let xp = parseFloat(st[i+2]);
-                let yp = parseFloat(st[i+3]);
-                let zp = parseFloat(st[i+4]);
-                let xr = parseFloat(st[i+5]);
-                let yr = parseFloat(st[i+6]);
-                let zr = parseFloat(st[i+7]);
-                let xs = parseFloat(st[i+8]);
-                let ys = parseFloat(st[i+9]);
-                let zs = parseFloat(st[i+10]);
-                objs.push(new JObject(xp, yp, zp, xr, yr, zr, xs, ys, zs, "Object" + objn, "-1", objn));
-                objn += 1;
-            }
-            if(st[i] == "cu"){ 
-                console.log("SDFLoader: found cubeuv mesh at index ="+ i);
-                let xp = parseFloat(st[i+2]);
-                let yp = parseFloat(st[i+3]);
-                let zp = parseFloat(st[i+4]);
-                let xr = parseFloat(st[i+5]);
-                let yr = parseFloat(st[i+6]);
-                let zr = parseFloat(st[i+7]);
-                let xs = parseFloat(st[i+8]);
-                let ys = parseFloat(st[i+9]);
-                let zs = parseFloat(st[i+10]);
-                objs.push(new JObject(xp, yp, zp, xr, yr, zr, xs, ys, zs, "Object" + objn, "-2", objn));
-                objn += 1;
-            }
-            if(st[i] == "pl"){ 
-                let xp = parseFloat(st[i+2]);
-                let yp = parseFloat(st[i+3]);
-                let zp = parseFloat(st[i+4]);
-                let xr = parseFloat(st[i+5]);
-                let yr = parseFloat(st[i+6]);
-                let zr = parseFloat(st[i+7]);
-                let xs = parseFloat(st[i+8]);
-                let ys = parseFloat(st[i+9]);
-                let zs = parseFloat(st[i+10]);
-                objs.push(new JObject(xp, yp, zp, xr, yr, zr, xs, ys, zs, "Object" + objn, "-3", objn));
-                objn += 1;
-                console.log("SDFLoader: found plane mesh at index ="+ i);
-            }
             if(st[i] == "lt"){ 
                 let xp = parseFloat(st[i+2]);
                 let yp = parseFloat(st[i+3]);
@@ -261,9 +204,97 @@ input.onchange = e => {
                 console.log("SDFLoader: found speaker at index ="+ i);
             }
             if(st[i] == "mat"){ 
-                mats.push(new JMaterial("tex"+st[i+6], "tex"+st[i+7], "tex"+st[i+8], "tex"+st[i+9], "tex"+st[i+10], "mat"+matnm));
+                let vls = ["tex"+st[i+6], "tex"+st[i+7], "tex"+st[i+8], "tex"+st[i+9], "tex"+st[i+10]];
+                var lnk = 0;
+                for(var j = 0; j != mats.length; j+=1){
+                    if(mats[j].albedo == vls[0] &&
+                        mats[j].roughness == vls[1] &&
+                        mats[j].metalic == vls[2] &&
+                        mats[j].ao == vls[3] &&
+                        mats[j].normal == vls[4]
+                    ){
+                        lnk = j;
+                        break;
+                    }
+                }
+                mats.push(new JMaterial(vls[0], vls[1], vls[2], vls[3], vls[4], "mat"+matnm, lnk));
                 console.log("SDFLoader: found material at index =" + i + " textures: " + st[i+6] + " " + st[i+7] + " " + st[i+8] + " " + st[i+9] + " " + st[i+10]);
                 matnm += 1;
+            }
+        }
+        for(var i = 0; i != st.length; i+=1){
+            if(st[i] == "md"){ 
+                console.log("SDFLoader: found model mesh at index ="+ i);
+                let mid = st[i+2];
+                let xp = parseFloat(st[i+3]);
+                let yp = parseFloat(st[i+4]);
+                let zp = parseFloat(st[i+5]);
+                let xr = parseFloat(st[i+6]);
+                let yr = parseFloat(st[i+7]);
+                let zr = parseFloat(st[i+8]);
+                let xs = parseFloat(st[i+9]);
+                let ys = parseFloat(st[i+10]);
+                let zs = parseFloat(st[i+11]);
+                var mtl = objn;
+                if(mats[mtl].lnk != -1){
+                    mtl = mats[mtl].lnk;
+                }
+                objs.push(new JObject(xp, yp, zp, xr, yr, zr, xs, ys, zs, "Object" + objn, "md"+mid, mtl));
+                objn += 1;
+            }
+            if(st[i] == "cs"){ 
+                console.log("SDFLoader: found cube mesh at index ="+ i);
+                let xp = parseFloat(st[i+2]);
+                let yp = parseFloat(st[i+3]);
+                let zp = parseFloat(st[i+4]);
+                let xr = parseFloat(st[i+5]);
+                let yr = parseFloat(st[i+6]);
+                let zr = parseFloat(st[i+7]);
+                let xs = parseFloat(st[i+8]);
+                let ys = parseFloat(st[i+9]);
+                let zs = parseFloat(st[i+10]);
+                var mtl = objn;
+                if(mats[mtl].lnk != -1){
+                    mtl = mats[mtl].lnk;
+                }
+                objs.push(new JObject(xp, yp, zp, xr, yr, zr, xs, ys, zs, "Object" + objn, "-1", mtl));
+                objn += 1;
+            }
+            if(st[i] == "cu"){ 
+                console.log("SDFLoader: found cubeuv mesh at index ="+ i);
+                let xp = parseFloat(st[i+2]);
+                let yp = parseFloat(st[i+3]);
+                let zp = parseFloat(st[i+4]);
+                let xr = parseFloat(st[i+5]);
+                let yr = parseFloat(st[i+6]);
+                let zr = parseFloat(st[i+7]);
+                let xs = parseFloat(st[i+8]);
+                let ys = parseFloat(st[i+9]);
+                let zs = parseFloat(st[i+10]);
+                var mtl = objn;
+                if(mats[mtl].lnk != -1){
+                    mtl = mats[mtl].lnk;
+                }
+                objs.push(new JObject(xp, yp, zp, xr, yr, zr, xs, ys, zs, "Object" + objn, "-2", mtl));
+                objn += 1;
+            }
+            if(st[i] == "pl"){ 
+                let xp = parseFloat(st[i+2]);
+                let yp = parseFloat(st[i+3]);
+                let zp = parseFloat(st[i+4]);
+                let xr = parseFloat(st[i+5]);
+                let yr = parseFloat(st[i+6]);
+                let zr = parseFloat(st[i+7]);
+                let xs = parseFloat(st[i+8]);
+                let ys = parseFloat(st[i+9]);
+                let zs = parseFloat(st[i+10]);
+                var mtl = objn;
+                if(mats[mtl].lnk != -1){
+                    mtl = mats[mtl].lnk;
+                }
+                objs.push(new JObject(xp, yp, zp, xr, yr, zr, xs, ys, zs, "Object" + objn, "-3", mtl));
+                objn += 1;
+                console.log("SDFLoader: found plane mesh at index ="+ i);
             }
         }
         ch = [true, true, true, true, true];
@@ -311,7 +342,7 @@ document.getElementById("crt").addEventListener("click", () => {
         if(label == ""){
             label = "mat"+mats.length;
         }
-        mats.push(new JMaterial(mif[0], mif[1], mif[2], mif[3], mif[4], label));
+        mats.push(new JMaterial(mif[0], mif[1], mif[2], mif[3], mif[4], label, -1));
         ch[3] = true;
     }else{
         alert("Not all textures exists or are set");

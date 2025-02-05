@@ -135,6 +135,8 @@ export class Gfxrender{
         this.changesh = false;
         this.renderlayers = 1;
         this.rendershadows = 1;
+        this.ldtex = [];
+        this.ldctex = [];
     }
     gfxgetcanvassizex(){
         return this.canvas.width;
@@ -564,117 +566,137 @@ export class Gfxmesh{
             addressModeW: repeatmode,
         });
 
-        const ids = texid.split(";");
-        if(ids.length <= 1 && ids[0].length === 0){
-            this.colortex = device.createTexture({
-                label: "colorTex",
-                size: [2, 2, 2],
-                dimension: "2d",
-                format: 'rgba8unorm',
-                usage:
-                  GPUTextureUsage.TEXTURE_BINDING |
-                  GPUTextureUsage.COPY_DST |
-                  GPUTextureUsage.RENDER_ATTACHMENT,
-            });
-            const textureData = new Uint8Array([
-                160, 32, 240, 256,
-                0, 0, 0, 256,
-                0, 0, 0, 256,
-                160, 32, 240, 256
-              ].flat());
-            for(let i = 0; i < 2; i++){
-                device.queue.writeTexture(
-                    {
-                        origin: [0, 0, i],
-                        texture: this.colortex,
-                    },
-                    textureData,
-                    { bytesPerRow: 8 },
-                    { width: 2, height: 2 },
-                );
+        this.colorid = -1;
+        for(var i = 0; i != gfx.ldtex.length; i+=1){
+            if(gfx.ldtex[i].label == texid){
+                this.colorid = i;
+                break;
             }
-        }else{
-            this.genMips(ids[0]);
-            this.colortex = device.createTexture({
-                label: "colorTex",
-                size: [document.getElementById(ids[0]).width, document.getElementById(ids[0]).height, ids.length+1],
-                mipLevelCount: this.mippsres.length,
-                dimension: "2d",
-                format: 'rgba8unorm',
-                usage:
-                  GPUTextureUsage.TEXTURE_BINDING |
-                  GPUTextureUsage.COPY_DST |
-                  GPUTextureUsage.RENDER_ATTACHMENT,
-            });
-            for(let i = 0; i < ids.length; i++){
-                this.genMips(ids[i]);
-                for(var m = 0; m < this.mippsres.length; m+=1){
+        }
+        if(this.colorid == -1){
+            this.colorid = gfx.ldtex.length;
+            const ids = texid.split(";");
+            if(ids.length <= 1 && ids[0].length === 0){
+                gfx.ldtex.push(device.createTexture({
+                    label: texid,
+                    size: [2, 2, 2],
+                    dimension: "2d",
+                    format: 'rgba8unorm',
+                    usage:
+                      GPUTextureUsage.TEXTURE_BINDING |
+                      GPUTextureUsage.COPY_DST |
+                      GPUTextureUsage.RENDER_ATTACHMENT,
+                }));
+                const textureData = new Uint8Array([
+                    160, 32, 240, 256,
+                    0, 0, 0, 256,
+                    0, 0, 0, 256,
+                    160, 32, 240, 256
+                  ].flat());
+                for(let i = 0; i < 2; i++){
                     device.queue.writeTexture(
                         {
                             origin: [0, 0, i],
-                            texture: this.colortex,
-                            mipLevel: m,
+                            texture: gfx.ldtex[this.colorid],
                         },
-                        this.mipimages[m],
-                        { bytesPerRow: this.mippsres[m][0]*4 },
-                        { width: this.mippsres[m][0], height: this.mippsres[m][1] },
+                        textureData,
+                        { bytesPerRow: 8 },
+                        { width: 2, height: 2 },
                     );
                 }
-                this.mipimages = [];
-                this.mippsres = [];
+            }else{
+                this.genMips(ids[0]);
+                gfx.ldtex.push(device.createTexture({
+                    label: texid,
+                    size: [document.getElementById(ids[0]).width, document.getElementById(ids[0]).height, ids.length+1],
+                    mipLevelCount: this.mippsres.length,
+                    dimension: "2d",
+                    format: 'rgba8unorm',
+                    usage:
+                      GPUTextureUsage.TEXTURE_BINDING |
+                      GPUTextureUsage.COPY_DST |
+                      GPUTextureUsage.RENDER_ATTACHMENT,
+                }));
+                for(let i = 0; i < ids.length; i++){
+                    this.genMips(ids[i]);
+                    for(var m = 0; m < this.mippsres.length; m+=1){
+                        device.queue.writeTexture(
+                            {
+                                origin: [0, 0, i],
+                                texture: gfx.ldtex[this.colorid],
+                                mipLevel: m,
+                            },
+                            this.mipimages[m],
+                            { bytesPerRow: this.mippsres[m][0]*4 },
+                            { width: this.mippsres[m][0], height: this.mippsres[m][1] },
+                        );
+                    }
+                    this.mipimages = [];
+                    this.mippsres = [];
+                }
             }
         }
 
-        const cds = cubeid.split(";");
-        if(cds.length != 6){
-            this.cubemap = device.createTexture({
-                label: "cubeMap",
-                size: [2, 2, 6],
-                dimension: "2d",
-                format: 'rgba8unorm',
-                usage:
-                  GPUTextureUsage.TEXTURE_BINDING |
-                  GPUTextureUsage.COPY_DST |
-                  GPUTextureUsage.RENDER_ATTACHMENT,
-            });
-            const textureData = new Uint8Array([
-                160, 32, 240, 256,
-                0, 0, 0, 256,
-                0, 0, 0, 256,
-                160, 32, 240, 256
-              ].flat());
-            for(let i = 0; i < 6; i++){
-                device.queue.writeTexture(
-                    {
-                        origin: [0, 0, i],
-                        texture: this.cubemap,
-                    },
-                    textureData,
-                    { bytesPerRow: 8 },
-                    { width: 2, height: 2 },
-                );
+        this.cubeid = -1;
+        for(var i = 0; i != gfx.ldctex.length; i+=1){
+            if(gfx.ldctex[i].label == cubeid){
+                this.cubeid = i;
+                break;
             }
-        }else{
-            this.cubemap = device.createTexture({
-                label: "cubeMap",
-                size: [document.getElementById(cds[0]).width, document.getElementById(cds[0]).height, cds.length],
-                dimension: "2d",
-                format: 'rgba8unorm',
-                usage:
-                  GPUTextureUsage.TEXTURE_BINDING |
-                  GPUTextureUsage.COPY_DST |
-                  GPUTextureUsage.RENDER_ATTACHMENT,
-            });
-            for(let i = 0; i < cds.length; i++){
-                device.queue.writeTexture(
-                    {
-                        origin: [0, 0, i],
-                        texture: this.cubemap,
-                    },
-                    this.getPixels(cds[i]),
-                    { bytesPerRow: 4*document.getElementById(cds[0]).width },
-                    { width: document.getElementById(cds[0]).width, height: document.getElementById(cds[0]).height },
-                );
+        }
+        if(this.cubeid == -1){
+            const cds = cubeid.split(";");
+            this.cubeid = gfx.ldctex.length;
+            if(cds.length != 6){
+                gfx.ldctex.push(device.createTexture({
+                    label: cubeid,
+                    size: [2, 2, 6],
+                    dimension: "2d",
+                    format: 'rgba8unorm',
+                    usage:
+                      GPUTextureUsage.TEXTURE_BINDING |
+                      GPUTextureUsage.COPY_DST |
+                      GPUTextureUsage.RENDER_ATTACHMENT,
+                }));
+                const textureData = new Uint8Array([
+                    160, 32, 240, 256,
+                    0, 0, 0, 256,
+                    0, 0, 0, 256,
+                    160, 32, 240, 256
+                  ].flat());
+                for(let i = 0; i < 6; i++){
+                    device.queue.writeTexture(
+                        {
+                            origin: [0, 0, i],
+                            texture: gfx.ldctex[this.cubeid],
+                        },
+                        textureData,
+                        { bytesPerRow: 8 },
+                        { width: 2, height: 2 },
+                    );
+                }
+            }else{
+                gfx.ldctex.push(device.createTexture({
+                    label: cubeid,
+                    size: [document.getElementById(cds[0]).width, document.getElementById(cds[0]).height, cds.length],
+                    dimension: "2d",
+                    format: 'rgba8unorm',
+                    usage:
+                      GPUTextureUsage.TEXTURE_BINDING |
+                      GPUTextureUsage.COPY_DST |
+                      GPUTextureUsage.RENDER_ATTACHMENT,
+                }));
+                for(let i = 0; i < cds.length; i++){
+                    device.queue.writeTexture(
+                        {
+                            origin: [0, 0, i],
+                            texture: gfx.ldctex[this.cubeid],
+                        },
+                        this.getPixels(cds[i]),
+                        { bytesPerRow: 4*document.getElementById(cds[0]).width },
+                        { width: document.getElementById(cds[0]).width, height: document.getElementById(cds[0]).height },
+                    );
+                }
             }
         }
 
@@ -693,7 +715,7 @@ export class Gfxmesh{
                 },
                 {
                     binding: 2,
-                    resource: this.colortex.createView()
+                    resource: gfx.ldtex[this.colorid].createView()
                 },
                 {
                     binding: 3,
@@ -701,7 +723,7 @@ export class Gfxmesh{
                 },
                 {
                     binding: 4,
-                    resource: this.cubemap.createView({
+                    resource: gfx.ldctex[this.cubeid].createView({
                         dimension: 'cube',
                     })
                 },
@@ -796,57 +818,78 @@ export class Gfxmesh{
             addressModeW: repeatmode,
         });
 
-          const ids = texid.split(";");
-          if(ids.length <= 1 && ids[0].length === 0){
-              this.colortex = device.createTexture({
-                  label: "colorTex",
-                  size: [2, 2, 2],
-                  dimension: "2d",
-                  format: 'rgba8unorm',
-                  usage:
-                    GPUTextureUsage.TEXTURE_BINDING |
-                    GPUTextureUsage.COPY_DST |
-                    GPUTextureUsage.RENDER_ATTACHMENT,
-              });
-              const textureData = new Uint8Array([
-                  160, 32, 240, 256,
-                  0, 0, 0, 256,
-                  0, 0, 0, 256,
-                  160, 32, 240, 256
-                ].flat());
-              for(let i = 0; i < 2; i++){
-                  device.queue.writeTexture(
-                      {
-                          origin: [0, 0, i],
-                          texture: this.colortex,
-                      },
-                      textureData,
-                      { bytesPerRow: 8 },
-                      { width: 2, height: 2 },
-                  );
-              }
-          }else{
-              this.colortex = device.createTexture({
-                  label: "colorTex",
-                  size: [document.getElementById(ids[0]).width, document.getElementById(ids[0]).height, ids.length+1],
-                  dimension: "2d",
-                  format: 'rgba8unorm',
-                  usage:
-                    GPUTextureUsage.TEXTURE_BINDING |
-                    GPUTextureUsage.COPY_DST |
-                    GPUTextureUsage.RENDER_ATTACHMENT,
-              });
-              for(let i = 0; i < ids.length; i++){
-                  device.queue.copyExternalImageToTexture(
-                    { source: document.getElementById(ids[i]) },
-                    { 
-                        texture: this.colortex,
-                        origin: [0, 0, i]
-                    },
-                    [document.getElementById(ids[i]).width, document.getElementById(ids[i]).height]
-                );
+        this.colorid = -1;
+        this.cubeid = -1;
+        for(var i = 0; i != gfx.ldtex.length; i+=1){
+            if(gfx.ldtex[i].label == texid){
+                this.colorid = i;
+                break;
             }
         }
+        if(this.colorid == -1){
+            this.colorid = gfx.ldtex.length;
+            const ids = texid.split(";");
+            if(ids.length <= 1 && ids[0].length === 0){
+                gfx.ldtex.push(device.createTexture({
+                    label: texid,
+                    size: [2, 2, 2],
+                    dimension: "2d",
+                    format: 'rgba8unorm',
+                    usage:
+                      GPUTextureUsage.TEXTURE_BINDING |
+                      GPUTextureUsage.COPY_DST |
+                      GPUTextureUsage.RENDER_ATTACHMENT,
+                }));
+                const textureData = new Uint8Array([
+                    160, 32, 240, 256,
+                    0, 0, 0, 256,
+                    0, 0, 0, 256,
+                    160, 32, 240, 256
+                  ].flat());
+                for(let i = 0; i < 2; i++){
+                    device.queue.writeTexture(
+                        {
+                            origin: [0, 0, i],
+                            texture: gfx.ldtex[this.colorid],
+                        },
+                        textureData,
+                        { bytesPerRow: 8 },
+                        { width: 2, height: 2 },
+                    );
+                }
+            }else{
+                this.genMips(ids[0]);
+                gfx.ldtex.push(device.createTexture({
+                    label: texid,
+                    size: [document.getElementById(ids[0]).width, document.getElementById(ids[0]).height, ids.length+1],
+                    mipLevelCount: this.mippsres.length,
+                    dimension: "2d",
+                    format: 'rgba8unorm',
+                    usage:
+                      GPUTextureUsage.TEXTURE_BINDING |
+                      GPUTextureUsage.COPY_DST |
+                      GPUTextureUsage.RENDER_ATTACHMENT,
+                }));
+                for(let i = 0; i < ids.length; i++){
+                    this.genMips(ids[i]);
+                    for(var m = 0; m < this.mippsres.length; m+=1){
+                        device.queue.writeTexture(
+                            {
+                                origin: [0, 0, i],
+                                texture: gfx.ldtex[this.colorid],
+                                mipLevel: m,
+                            },
+                            this.mipimages[m],
+                            { bytesPerRow: this.mippsres[m][0]*4 },
+                            { width: this.mippsres[m][0], height: this.mippsres[m][1] },
+                        );
+                    }
+                    this.mipimages = [];
+                    this.mippsres = [];
+                }
+            }
+        }
+
         this.createpipeline(gfx, vertexcode, fragmentcode, "none");
         this.postbindGroup = device.createBindGroup({
             layout: this.postpipeline.getBindGroupLayout(0),
@@ -862,7 +905,7 @@ export class Gfxmesh{
                 },
                 {
                     binding: 2,
-                    resource: this.colortex.createView()
+                    resource: gfx.ldtex[this.colorid].createView()
                 },
                 {
                     binding: 3,
@@ -1004,6 +1047,7 @@ export class Gfxmesh{
         this.shcullmq = "";
         this.reqpl = false;
         this.render = true;
+        console.log("Gfxmesh: colorid="+this.colorid+" cubeid="+this.cubeid);
     }
     will_render(render){
         this.render = render;
@@ -1023,7 +1067,7 @@ export class Gfxmesh{
                 },
                 {
                     binding: 2,
-                    resource: this.colortex.createView()
+                    resource: gfx.ldtex[this.colorid].createView()
                 },
                 {
                     binding: 3,
@@ -1074,7 +1118,7 @@ export class Gfxmesh{
                 },
                 {
                     binding: 2,
-                    resource: this.colortex.createView()
+                    resource: gfx.ldtex[this.colorid].createView()
                 },
                 {
                     binding: 3,
@@ -1082,7 +1126,7 @@ export class Gfxmesh{
                 },
                 {
                     binding: 4,
-                    resource: this.cubemap.createView({
+                    resource: gfx.ldctex[this.cubeid].createView({
                         dimension: 'cube',
                     })
                 },
