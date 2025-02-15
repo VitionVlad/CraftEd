@@ -90,7 +90,7 @@ var mats = [];
 
 mats.push(
     new JMaterial("tex1", "tex2", "tex3", "tex4", "tex5", "bricks", -1),
-    new JMaterial("tex6", "tex7", "tex8", "tex9", "tex10", "concrete", -1),
+    new JMaterial("tex6", "tex7", "tex8", "tex9", "tex10", "bricks_bridge", -1),
     new JMaterial("tex11", "tex12", "tex13", "tex14", "tex15", "fabric_blue", -1),
     new JMaterial("tex16", "tex17", "tex18", "tex19", "tex20", "fabric_gray", -1),
     new JMaterial("tex21", "tex22", "tex23", "tex24", "tex25", "fabric_red", -1),
@@ -98,13 +98,14 @@ mats.push(
     new JMaterial("tex31", "tex32", "tex33", "tex34", "tex35", "gray_plaster", -1),
     new JMaterial("tex36", "tex37", "tex38", "tex39", "tex40", "metal", -1),
     new JMaterial("tex41", "tex42", "tex43", "tex44", "tex45", "paving", -1),
-    new JMaterial("tex46", "tex47", "tex48", "tex49", "tex50", "red_plaster", -1),
+    new JMaterial("tex46", "tex47", "tex48", "tex49", "tex50", "red_plaster", -1),   
     new JMaterial("tex51", "tex52", "tex53", "tex54", "tex55", "roof", -1),
     new JMaterial("tex56", "tex57", "tex58", "tex59", "tex60", "tiles", -1),
     new JMaterial("tex61", "tex62", "tex63", "tex64", "tex65", "wood", -1),
     new JMaterial("tex66", "tex67", "tex68", "tex69", "tex70", "wood_dark", -1),
     new JMaterial("tex71", "tex72", "tex73", "tex74", "tex75", "wood_floor", -1),
     new JMaterial("tex76", "tex77", "tex78", "tex79", "tex80", "yellow_plaster", -1),
+    new JMaterial("tex81", "tex82", "tex83", "tex84", "tex85", "french_flag", -1),
 );
 
 var ch = [true, true, true, true, true];
@@ -170,7 +171,7 @@ input.onchange = e => {
     var reader = new FileReader();
     reader.readAsText(file);
     reader.onload = function () {
-        var objn = 16;
+        var objn = 17;
         var audn = 0;
         var ltn = 0;
         var matnm = 0;
@@ -239,7 +240,7 @@ input.onchange = e => {
                 if(mats[mtl].lnk != -1){
                     mtl = mats[mtl].lnk;
                 }
-                objs.push(new JObject(xp, yp, zp, xr, yr, zr, xs, ys, zs, "Object" + objn, "md"+mid, mtl));
+                objs.push(new JObject(xp, yp, zp, xr, yr, zr, xs, ys, zs, "Object" + (objn - 17), "md"+mid, mtl));
                 objn += 1;
             }
             if(st[i] == "cs"){ 
@@ -257,7 +258,7 @@ input.onchange = e => {
                 if(mats[mtl].lnk != -1){
                     mtl = mats[mtl].lnk;
                 }
-                objs.push(new JObject(xp, yp, zp, xr, yr, zr, xs, ys, zs, "Object" + objn, "-1", mtl));
+                objs.push(new JObject(xp, yp, zp, xr, yr, zr, xs, ys, zs, "Object" + (objn - 17), "-1", mtl));
                 objn += 1;
             }
             if(st[i] == "cu"){ 
@@ -275,7 +276,7 @@ input.onchange = e => {
                 if(mats[mtl].lnk != -1){
                     mtl = mats[mtl].lnk;
                 }
-                objs.push(new JObject(xp, yp, zp, xr, yr, zr, xs, ys, zs, "Object" + objn, "-2", mtl));
+                objs.push(new JObject(xp, yp, zp, xr, yr, zr, xs, ys, zs, "Object" + (objn - 17), "-2", mtl));
                 objn += 1;
             }
             if(st[i] == "pl"){ 
@@ -292,7 +293,7 @@ input.onchange = e => {
                 if(mats[mtl].lnk != -1){
                     mtl = mats[mtl].lnk;
                 }
-                objs.push(new JObject(xp, yp, zp, xr, yr, zr, xs, ys, zs, "Object" + objn, "-3", mtl));
+                objs.push(new JObject(xp, yp, zp, xr, yr, zr, xs, ys, zs, "Object" + (objn - 17), "-3", mtl));
                 objn += 1;
                 console.log("SDFLoader: found plane mesh at index ="+ i);
             }

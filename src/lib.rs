@@ -221,6 +221,12 @@ pub fn main() {
       eng.cameras[0].physic_object.rot.x += eng.mouse.get_y_coords() as f32/eng.render.get_canvas_size_y()as f32;
       eng.cameras[0].physic_object.rot.y += eng.mouse.get_x_coords() as f32/eng.render.get_canvas_size_x()as f32;
     }
+    if eng.cameras[0].physic_object.rot.x > 1.5f32{
+      eng.cameras[0].physic_object.rot.x = 1.5f32;
+    }
+    if eng.cameras[0].physic_object.rot.x < -1.5f32{
+      eng.cameras[0].physic_object.rot.x = -1.5f32;
+    }
     if eng.keyboard.is_key_pressed(11){
       eng.cameras[0].physic_object.speed.z += f32::cos(eng.cameras[0].physic_object.rot.x) * f32::cos(eng.cameras[0].physic_object.rot.y) * SPEED;
       eng.cameras[0].physic_object.speed.x += f32::cos(eng.cameras[0].physic_object.rot.x) * f32::sin(eng.cameras[0].physic_object.rot.y) * -SPEED;
