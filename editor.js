@@ -627,7 +627,9 @@ function lp(){
         var lst = document.getElementById("lst_mt_ass");
         lst.innerHTML = "";
         for(var i = 0; i != mats.length; i+=1){
-            lst.innerHTML += '<option value="' + i + '">' + mats[i].label + '</option>';
+            if(mats[i].lnk == -1){
+                lst.innerHTML += '<option value="' + i + '">' + mats[i].label + '</option>';
+            }
         }
         ch[3] = false;
     }
