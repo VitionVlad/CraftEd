@@ -1,3 +1,4 @@
+
 use engine::cube::{CUBE, CUBEUV};
 use engine::engine::Engine;
 use engine::light::Light;
@@ -41,6 +42,7 @@ pub fn main() {
   eng.lights[0] = Light::new(engine::light::LightType::Spot);
 
   let mut matgen = MaterialGenerator::new(vec![]);
+  matgen.culling_mode_shadow = "front".to_string();
   matgen.gen_vertex();
   matgen.gen_frag_beg();
   matgen.fragment_shader += "
@@ -135,15 +137,17 @@ pub fn main() {
     }
 
     for i in 0..(get_val(5, -1, 0, 0) as usize){
-      let mut tid = "".to_string();
-      for b in 0..4{
-        tid+=&("tex".to_string()+&(get_val(5, i as i32, b, 0) as i32).to_string()+";");
-      }
-      tid+=&("tex".to_string()+&(get_val(5, i as i32, 4, 0) as i32).to_string());
-      if i >= mats.len(){
-        mats.push(matgen.generate_material(tid, "".to_string()));
-      }else{
-        mats[i] = matgen.generate_material(tid, "".to_string());
+      if get_val(5, i as i32, 5, 0) == 1.0f32 {
+        let mut tid = "".to_string();
+        for b in 0..4{
+          tid+=&("tex".to_string()+&(get_val(5, i as i32, b, 0) as i32).to_string()+";");
+        }
+        tid+=&("tex".to_string()+&(get_val(5, i as i32, 4, 0) as i32).to_string());
+        if i >= mats.len(){
+          mats.push(matgen.generate_material(tid, "".to_string()));
+        }else{
+          mats[i] = matgen.generate_material(tid, "".to_string());
+        }
       }
     }
 
@@ -216,6 +220,12 @@ pub fn main() {
     if get_mouse_lock(){
       eng.cameras[0].physic_object.rot.x += eng.mouse.get_y_coords() as f32/eng.render.get_canvas_size_y()as f32;
       eng.cameras[0].physic_object.rot.y += eng.mouse.get_x_coords() as f32/eng.render.get_canvas_size_x()as f32;
+    }
+    if eng.cameras[0].physic_object.rot.x > 1.5f32{
+      eng.cameras[0].physic_object.rot.x = 1.5f32;
+    }
+    if eng.cameras[0].physic_object.rot.x < -1.5f32{
+      eng.cameras[0].physic_object.rot.x = -1.5f32;
     }
     if eng.keyboard.is_key_pressed(11){
       eng.cameras[0].physic_object.speed.z += f32::cos(eng.cameras[0].physic_object.rot.x) * f32::cos(eng.cameras[0].physic_object.rot.y) * SPEED;

@@ -116,6 +116,8 @@ export function get_val(g, i, f, p){
                     return Number(mats[i].ao.replace("tex", ""));
                 case 4:
                     return Number(mats[i].normal.replace("tex", ""));
+                case 5:
+                    return Number(mats[i].lnk == -1);
             }
             break;
     }
