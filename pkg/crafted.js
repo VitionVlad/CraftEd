@@ -1,6 +1,6 @@
 import { get_elem_ch } from './snippets/crafted-974ab77c7d42ec87/src/editorust.js';
 import { Jsaudioctx, Jsaudiosource } from './snippets/crafted-974ab77c7d42ec87/src/engine/audio/audio.js';
-import { Jskeyboard, Jsgamepad, Jsmouse, Jstouch } from './snippets/crafted-974ab77c7d42ec87/src/engine/input/input.js';
+import { Jstouch, Jsgamepad, Jskeyboard, Jsmouse } from './snippets/crafted-974ab77c7d42ec87/src/engine/input/input.js';
 import { Gfxrender, Gfxmesh, Jsloop, snlll } from './snippets/crafted-974ab77c7d42ec87/src/engine/render/gfx.js';
 import { Jsrelod } from './snippets/crafted-974ab77c7d42ec87/src/engine/resourceloader/resloader.js';
 import * as __wbg_star0 from './snippets/crafted-974ab77c7d42ec87/src/editorust.js';
@@ -212,9 +212,6 @@ function __wbg_get_imports() {
     imports.wbg.__wbg_snlll_7675f1278bee0320 = function(arg0, arg1) {
         snlll(getObject(arg0), arg1 >>> 0);
     };
-    imports.wbg.__wbg_pushmesh_e088f0ee92e54f1d = function(arg0, arg1, arg2) {
-        getObject(arg0).push_mesh(getObject(arg1), arg2);
-    };
     imports.wbg.__wbg_new_1f374088719da1fa = function(arg0, arg1) {
         const ret = new Jsrelod(getStringFromWasm0(arg0, arg1));
         return addHeapObject(ret);
@@ -243,6 +240,9 @@ function __wbg_get_imports() {
     };
     imports.wbg.__wbg_play_aa8ab50b725a67e0 = function(arg0) {
         getObject(arg0).play();
+    };
+    imports.wbg.__wbg_pushmesh_e088f0ee92e54f1d = function(arg0, arg1, arg2) {
+        getObject(arg0).push_mesh(getObject(arg1), arg2);
     };
     imports.wbg.__wbg_buffer_12d079cc21e14bdb = function(arg0) {
         const ret = getObject(arg0).buffer;
